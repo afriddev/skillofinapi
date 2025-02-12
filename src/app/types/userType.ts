@@ -13,7 +13,6 @@ export type userSignUpPayloadType = {
     emailId: string;
     password: string;
     otp?: string;
-    role: "freelancer" | "client";
   };
 
   

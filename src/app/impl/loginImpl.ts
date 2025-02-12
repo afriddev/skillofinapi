@@ -1,9 +1,6 @@
 "use server";
 
-import {
-  responseEnums,
-  userEnums,
-} from "../enums/responseEnums";
+import { responseEnums, userEnums } from "../enums/responseEnums";
 import connectDB from "../mongodb/connectors/connectDB";
 import clientModel from "../mongodb/models/clientModel";
 import freelancerModel from "../mongodb/models/freelancerModel";
@@ -21,36 +18,38 @@ export async function handleLoginIMPL(
   const userData = await userModel.findOne({ emailId: user.emailId });
 
   if (!userData) {
-    return { status: 404, message: userEnums.USER_NOT_FOUND };
+    return { status: 200, message: userEnums.USER_NOT_FOUND };
   }
 
   if (decodeString(userData.password) !== user.password) {
-    return { status: 401, message: userEnums.INVALID_PASSWORD };
+    return { status: 200, message: userEnums.INVALID_PASSWORD };
   }
 
   const roleCollection =
-    user.role === "freelancer" ? freelancerModel : clientModel;
+    userData?.role.toLowerCase() === "freelancer"
+      ? freelancerModel
+      : clientModel;
   const roleData = await roleCollection.findOne({ emailId: user.emailId });
 
   if (!roleData) {
-    return { status: 403, message: userEnums.USER_NOT_FOUND };
+    return { status: 200, message: userEnums.USER_NOT_FOUND };
   }
 
   if (user.otp) {
     if (userData.otp?.toString() === user.otp.toString()) {
+      const authToken = encodeString(user.emailId);
       await userModel.updateOne(
         { emailId: user.emailId },
-        { $set: { loggedIn: true } }
+        { $set: { loggedIn: true, authToken } }
       );
 
       return {
         status: 200,
         message: responseEnums.SUCCESS,
-        authToken: encodeString(user.emailId),
-        ca: userData.ca,
+        authToken,
       };
     } else {
-      return { status: 401, message: userEnums.INVALID_OTP };
+      return { status: 200, message: userEnums.INVALID_OTP };
     }
   }
 

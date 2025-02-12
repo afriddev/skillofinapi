@@ -21,7 +21,9 @@ export async function POST(req: Request) {
     const response = NextResponse.json({ message }, { status });
 
     if (message === responseEnums.SUCCESS && authToken) {
-      response.cookies.set("authToken", authToken);
+      response.cookies.set("authToken", authToken,{
+        secure:false
+      });
     }
 
     return response;

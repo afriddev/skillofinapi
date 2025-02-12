@@ -118,7 +118,6 @@ const freelancerSchema = new Schema(
     firstName: { type: String, required: true },
     lastName: { type: String, default: null },
     emailId: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
     taxNumber: { type: String, default: null },
     mobileNumber: { type: String, required: false,default:"" },
     secondaryMobileNumber: { type: String, default: null },

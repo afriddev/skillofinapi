@@ -73,7 +73,6 @@ async function handleSignUpIMPL(
     });
 
     await roleCollection.create({
-      userId: user?.emailId,
       emailId: user?.emailId,
       firstName: user?.firstName,
       lastName: user?.lastName ?? "",

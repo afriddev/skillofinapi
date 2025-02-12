@@ -24,18 +24,28 @@ async function handleSignUpIMPL(
 
   const tempUser = await tempUsersModel.findOne({ emailId: user?.emailId });
 
-  if (!tempUser) {
+  if (!tempUser || (tempUser && !user.otp)) {
     const otp = getOTP();
     const otpResponse = await sendOtp(user?.emailId, otp, "SIGNUP");
     if (otpResponse !== responseEnums.SUCCESS) {
       return { status: 500, message: responseEnums.ERROR };
     }
 
-    await tempUsersModel.create({
-      emailId: user?.emailId,
-      otp,
-      expiresAt: new Date(),
-    });
+    if (tempUser) {
+      await tempUsersModel.findOneAndUpdate(
+        { emailId: user?.emailId },
+        {
+          otp,
+          expiresAt: new Date(),
+        }
+      );
+    } else {
+      await tempUsersModel.create({
+        emailId: user?.emailId,
+        otp,
+        expiresAt: new Date(),
+      });
+    }
 
     return { status: 200, message: userEnums.OTP_SUCCESS };
   }

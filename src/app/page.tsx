@@ -2,6 +2,6 @@
 
 export default function Home() {
   return (
-   <div>Spend Tracker</div>
+   <div>SkilloFin</div>
   );
 }

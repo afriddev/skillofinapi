@@ -9,7 +9,7 @@ const userSchema = new Schema(
   {
     lastUpdatedAt: { type: Date, default: Date.now },
     createdAt: { type: Date, default: Date.now },
-    authToken: { type: String },
+    authToken: { type: String,required:false,default:"" },
     otp: { type: Number },
     firstName: { type: String, required: true },
     lastName: { type: String, default: null },

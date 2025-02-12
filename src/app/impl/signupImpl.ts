@@ -2,7 +2,7 @@
 
 import { responseEnums, userEnums } from "../enums/responseEnums";
 import connectDB from "../mongodb/connectors/connectDB";
-import clientModel from "../mongodb/models/clientModel";
+import clientModel, { userRole } from "../mongodb/models/clientModel";
 import freelancerModel from "../mongodb/models/freelancerModel";
 import tempUsersModel from "../mongodb/models/tempUsersModel";
 import userModel from "../mongodb/models/userModel";
@@ -10,6 +10,7 @@ import { sendOtp } from "../services/apiServices";
 import { userSignUpPayloadType } from "../types/userType";
 import { getOTP, getTodayDate } from "../utils/appUtils";
 import { encodeString } from "../utils/auth/authHandlers";
+import { getAUthToken } from "../utils/auth/cookieHandlers";
 
 async function handleSignUpIMPL(
   user: userSignUpPayloadType
@@ -51,11 +52,12 @@ async function handleSignUpIMPL(
       emailId: user?.emailId,
       firstName: user?.firstName,
       lastName: user?.lastName ?? "",
-      phoneNumber: user?.phoneNumber,
-      authToken: user?.authToken,
+      authToken: getAUthToken(),
       password: encodeString(user?.password),
-      role: user?.role,
-      ca: true,
+      role:
+        user?.role.toLowerCase() === "client"
+          ? userRole.CLIENT
+          : userRole.FREELANCER,
       createdAt: getTodayDate(),
       lastUpdatedAt: getTodayDate(),
     });
@@ -65,7 +67,7 @@ async function handleSignUpIMPL(
       emailId: user?.emailId,
       firstName: user?.firstName,
       lastName: user?.lastName ?? "",
-      phoneNumber: user?.phoneNumber,
+      mobileNumber: user?.mobileNumber,
       createdAt: getTodayDate(),
       lastUpdatedAt: getTodayDate(),
     });

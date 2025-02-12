@@ -120,7 +120,7 @@ const freelancerSchema = new Schema(
     emailId: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     taxNumber: { type: String, default: null },
-    mobileNumber: { type: String, required: true },
+    mobileNumber: { type: String, required: false,default:"" },
     secondaryMobileNumber: { type: String, default: null },
     location: { type: String, default: null },
     availability: { type: Boolean, default: false },

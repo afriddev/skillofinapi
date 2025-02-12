@@ -3,7 +3,7 @@ export type userSignUpPayloadType = {
     firstName: string;
     lastName?: string;
     password: string;
-    phoneNumber?: string;
+    mobileNumber?: string;
     authToken?: string;
     otp?: string;
     role: "freelancer" | "client";

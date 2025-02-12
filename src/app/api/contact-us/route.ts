@@ -6,22 +6,25 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { fullName, emailId, message, phone } = await req?.json();
+    const { fullName, emailId, phone } = await req?.json();
 
-    if (fullName && emailId && message) {
+    if (fullName && emailId ) {
       await connectDB("contactedUsers");
       const alreadyContactedUser = await contactedUsersModel.findOne({
         emailId,
       });
 
       if (!alreadyContactedUser)
+      {
         await contactedUsersModel.create({
           createdAt: getTodayDate(),
           emailId,
-          message,
+          message:"",
           phone,
           fullName,
         });
+      }
+        
 
       return NextResponse.json(
         {

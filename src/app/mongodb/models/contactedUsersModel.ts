@@ -18,11 +18,11 @@ const contactedUsersSchema = new Schema(
     },
     message: {
       type: String,
-      required: true,
+      required: false,
     },
     phone: {
       type: String,
-      required: false,
+      required: false
     },
   },
   {

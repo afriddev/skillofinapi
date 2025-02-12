@@ -1,6 +1,6 @@
 "use server";
 
-import { exceptionEnums, responseEnums } from "@/app/enums/responseEnums";
+import { exceptionEnums } from "@/app/enums/responseEnums";
 import { handleLoginIMPL } from "@/app/impl/loginImpl";
 import { userLoginPayloadType } from "@/app/types/userType";
 import { NextResponse } from "next/server";
@@ -18,11 +18,7 @@ export async function POST(req: Request) {
 
     const { message, status, authToken } = await handleLoginIMPL(request);
 
-    const response = NextResponse.json({ message }, { status });
-
-    if (message === responseEnums.SUCCESS && authToken) {
-      response.cookies.set("authToken", authToken);
-    }
+    const response = NextResponse.json({ message, authToken }, { status });
 
     return response;
   } catch (error) {

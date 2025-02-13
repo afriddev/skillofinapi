@@ -3,8 +3,9 @@ import { userRole } from "./userModel";
 
 export enum LANGUAGE_ENUM {
   BASIC = "BASIC",
+  FLUENT = "FLUENT",
+  NATIVE = "NATIVE",
   INTERMEDIATE = "INTERMEDIATE",
-  ADVANCED = "ADVANCED",
 }
 
 export enum KYC_STATUS_ENUM {
@@ -26,6 +27,7 @@ export enum TRANSACTION_STATUS_ENUM {
 }
 
 const projectSchema = new Schema({
+  id: { type: String, required: false, default: null },
   title: { type: String, required: true },
   description: { type: String, default: null },
   images: [{ type: String, default: null }],
@@ -33,8 +35,16 @@ const projectSchema = new Schema({
   startDate: { type: Date, default: null },
   endDate: { type: Date, default: null },
 });
+const educationSchema = new Schema({
+  id: { type: String, required: false, default: null },
+  name: { type: String, required: true },
+  description: { type: String, default: null },
+  startDate: { type: Date, default: null },
+  endDate: { type: Date, default: null },
+});
 
 const bidSchema = new Schema({
+  id: { type: String, required: false, default: null },
   projectId: { type: Schema.Types.ObjectId, required: true },
   amount: { type: Number, required: true },
   proposal: { type: String, default: null },
@@ -47,6 +57,7 @@ const bidSchema = new Schema({
 });
 
 const transactionSchema = new Schema({
+  id: { type: String, required: false, default: null },
   amount: { type: Number, required: true },
   date: { type: Date, default: Date.now },
   type: { type: String, enum: ["WITHDRAWAL", "DEPOSIT"], required: true },
@@ -58,6 +69,7 @@ const transactionSchema = new Schema({
 });
 
 const bankDetailsSchema = new Schema({
+  id: { type: String, required: false, default: null },
   accountHolderName: { type: String, required: true },
   accountNumber: { type: String, required: true },
   bankName: { type: String, required: true },
@@ -66,6 +78,7 @@ const bankDetailsSchema = new Schema({
   linkedEmail: { type: String, required: true },
 });
 const employmentSchema = new Schema({
+  id: { type: String, required: false, default: null },
   companyName: { type: String, required: true },
   role: { type: String, required: true },
   startDate: { type: Date, required: true },
@@ -75,6 +88,7 @@ const employmentSchema = new Schema({
 });
 
 const kycSchema = new Schema({
+  id: { type: String, required: false, default: null },
   documentType: { type: String, required: true },
   documentNumber: { type: String, required: true },
   documentFile: { type: String, required: true },
@@ -88,11 +102,13 @@ const kycSchema = new Schema({
 });
 
 const skillSchema = new Schema({
+  id: { type: String, required: false, default: null },
   name: { type: String, required: true },
   proficiency: { type: Number, min: 1, max: 5, default: 3 },
 });
 
 const certificationSchema = new Schema({
+  id: { type: String, required: false, default: null },
   title: { type: String, required: true },
   provider: { type: String, required: true },
   issueDate: { type: Date, default: null },
@@ -101,6 +117,7 @@ const certificationSchema = new Schema({
 });
 
 const testScoreSchema = new Schema({
+  id: { type: String, required: false, default: null },
   testName: { type: String, required: true },
   score: { type: Number, required: true },
   dateTaken: { type: Date, default: null },
@@ -119,7 +136,9 @@ const freelancerSchema = new Schema(
     lastName: { type: String, default: null },
     emailId: { type: String, required: true, unique: true },
     taxNumber: { type: String, default: null },
-    mobileNumber: { type: String, required: false,default:"" },
+    mobileNumber: { type: String, required: false, default: "" },
+    title: { type: String, required: false, default: null },
+    description: { type: String, required: false, default: null },
     secondaryMobileNumber: { type: String, default: null },
     location: { type: String, default: null },
     availability: { type: Boolean, default: false },
@@ -133,12 +152,18 @@ const freelancerSchema = new Schema(
             enum: Object.values(LANGUAGE_ENUM),
             required: true,
           },
+          id: {
+            type: String,
+            required: false,
+            default: null,
+          },
         },
       ],
       default: [],
     },
     resume: { type: String, default: null },
     employmentHistory: { type: [employmentSchema], default: [] },
+    educationHistory: { type: [educationSchema], default: [] },
     projects: { type: [projectSchema], default: [] },
     kyc: { type: kycSchema, default: null },
     skills: { type: [skillSchema], default: [] },

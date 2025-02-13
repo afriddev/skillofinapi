@@ -8,7 +8,7 @@ import tempUsersModel from "../mongodb/models/tempUsersModel";
 import userModel from "../mongodb/models/userModel";
 import { sendOtp } from "../services/apiServices";
 import { userSignUpPayloadType } from "../types/userType";
-import { getOTP, getTodayDate } from "../utils/appUtils";
+import { getOTP } from "../utils/appUtils";
 import { encodeString } from "../utils/auth/authHandlers";
 import { getAUthToken } from "../utils/auth/cookieHandlers";
 

@@ -68,8 +68,6 @@ async function handleSignUpIMPL(
         user?.role.toLowerCase() === "client"
           ? userRole.CLIENT
           : userRole.FREELANCER,
-      createdAt: getTodayDate(),
-      lastUpdatedAt: getTodayDate(),
     });
 
     await roleCollection.create({
@@ -77,8 +75,6 @@ async function handleSignUpIMPL(
       firstName: user?.firstName,
       lastName: user?.lastName ?? "",
       mobileNumber: user?.mobileNumber,
-      createdAt: getTodayDate(),
-      lastUpdatedAt: getTodayDate(),
     });
 
     await tempUsersModel.deleteMany({ emailId: user?.emailId });

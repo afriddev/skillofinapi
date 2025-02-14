@@ -31,6 +31,16 @@ export async function updateProfileImpl(user: {
 
   try {
     switch (user?.method) {
+      case "online":
+        await userModel.updateOne(
+          { emailId },
+          {
+            $set: {
+              online: user?.data?.value,
+            },
+          }
+        );
+        break;
       case "title":
         await userAccountModel.updateOne(
           { emailId },
@@ -123,7 +133,7 @@ export async function updateProfileImpl(user: {
           { emailId },
           {
             $push: {
-                educationHistory: {
+              educationHistory: {
                 name: user?.data?.name,
                 description: user?.data?.description,
 

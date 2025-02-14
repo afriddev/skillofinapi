@@ -23,6 +23,7 @@ const userSchema = new Schema(
       default: userRole.FREELANCER,
     },
     profile: { type: String, required: false, default: null },
+    online: { type: Boolean, required: false, default: false },
   },
   { versionKey: false }
 );

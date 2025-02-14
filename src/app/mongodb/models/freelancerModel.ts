@@ -27,7 +27,6 @@ export enum TRANSACTION_STATUS_ENUM {
 }
 
 const projectSchema = new Schema({
-  id: { type: String, required: false, default: null },
   title: { type: String, required: true },
   description: { type: String, default: null },
   images: [{ type: String, default: null }],
@@ -36,15 +35,13 @@ const projectSchema = new Schema({
   endDate: { type: Date, default: null },
 });
 const educationSchema = new Schema({
-  id: { type: String, required: false, default: null },
   name: { type: String, required: true },
   description: { type: String, default: null },
-  startDate: { type: Date, default: null },
-  endDate: { type: Date, default: null },
+  startDate: { type: String, default: null },
+  endDate: { type: String, default: null },
 });
 
 const bidSchema = new Schema({
-  id: { type: String, required: false, default: null },
   projectId: { type: Schema.Types.ObjectId, required: true },
   amount: { type: Number, required: true },
   proposal: { type: String, default: null },
@@ -57,7 +54,6 @@ const bidSchema = new Schema({
 });
 
 const transactionSchema = new Schema({
-  id: { type: String, required: false, default: null },
   amount: { type: Number, required: true },
   date: { type: Date, default: Date.now },
   type: { type: String, enum: ["WITHDRAWAL", "DEPOSIT"], required: true },
@@ -69,7 +65,6 @@ const transactionSchema = new Schema({
 });
 
 const bankDetailsSchema = new Schema({
-  id: { type: String, required: false, default: null },
   accountHolderName: { type: String, required: true },
   accountNumber: { type: String, required: true },
   bankName: { type: String, required: true },
@@ -78,17 +73,15 @@ const bankDetailsSchema = new Schema({
   linkedEmail: { type: String, required: true },
 });
 const employmentSchema = new Schema({
-  id: { type: String, required: false, default: null },
   companyName: { type: String, required: true },
   role: { type: String, required: true },
-  startDate: { type: Date, required: true },
-  endDate: { type: Date, default: null },
+  startDate: { type: String, required: true },
+  endDate: { type: String, default: null },
   currentlyWorking: { type: Boolean, default: false },
   description: { type: String, default: null },
 });
 
 const kycSchema = new Schema({
-  id: { type: String, required: false, default: null },
   documentType: { type: String, required: true },
   documentNumber: { type: String, required: true },
   documentFile: { type: String, required: true },
@@ -102,9 +95,8 @@ const kycSchema = new Schema({
 });
 
 const skillSchema = new Schema({
-  id: { type: String, required: false, default: null },
   name: { type: String, required: true },
-  proficiency: { type: Number, min: 1, max: 5, default: 3 },
+  proficiency: { type: Number, min: 1, max: 5, required: false, default: 3 },
 });
 
 const certificationSchema = new Schema({

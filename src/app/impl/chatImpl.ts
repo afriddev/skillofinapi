@@ -1,4 +1,4 @@
-import { responseEnums, userEnums } from "../enums/responseEnums";
+import { responseEnums } from "../enums/responseEnums";
 import connectDB from "../mongodb/connectors/connectDB";
 import clientModel, { userRole } from "../mongodb/models/clientModel";
 import freelancerModel from "../mongodb/models/freelancerModel";
@@ -45,6 +45,7 @@ export async function chatImpl(user: {
   const path = `messages.${user.receiver.replace(/\./g, "_")}.messages`;
   const pathName = `messages.${user.receiver.replace(/\./g, "_")}.name`;
   const pathProfile = `messages.${user.receiver.replace(/\./g, "_")}.profile`;
+  const pathProfileRead = `messages.${user.receiver.replace(/\./g, "_")}.read`;
 
   await userModel.updateOne(
     { emailId: emailId },
@@ -54,6 +55,7 @@ export async function chatImpl(user: {
         [pathName]:
           receiverData?.firstName + " " + (receiverData?.lastName ?? ""),
         [pathProfile]: receiverData?.profile,
+        [pathProfileRead]: senderMessages.length,
       },
     }
   );
@@ -83,6 +85,9 @@ export async function chatImpl(user: {
           senderData?.firstName + " " + (senderData?.lastName ?? ""),
         [`messages.${emailId.replace(/\./g, "_")}.profile`]:
           senderData?.profile,
+
+        [`messages.${emailId.replace(/\./g, "_")}.read`]:
+          receiverData?.messages[emailId.replace(/\./g, "_")]?.read ?? 0,
       },
     }
   );

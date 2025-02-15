@@ -159,8 +159,6 @@ const freelancerSchema = new Schema(
     projects: { type: [projectSchema], default: [] },
     kyc: { type: kycSchema, default: null },
     skills: { type: [skillSchema], default: [] },
-    certifications: { type: [certificationSchema], default: [] },
-    testScores: { type: [testScoreSchema], default: [] },
     socialProfiles: {
       linkedin: { type: String, default: null },
       github: { type: String, default: null },

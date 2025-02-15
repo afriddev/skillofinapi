@@ -1,4 +1,5 @@
 import mongoose, { models, Schema } from "mongoose";
+import { isNullOrUndefined } from "util";
 
 export enum userRole {
   CLIENT = "CLIENT",
@@ -83,20 +84,6 @@ const bankDetailsSchema = new Schema(
   { _id: false }
 );
 
-const clientSchema = new Schema(
-  {
-    companyName: { type: String, required: true },
-    website: { type: String, default: null },
-    industry: { type: String, default: null },
-    location: { type: String, default: null },
-    postedProjects: { type: [projectSchema], default: [] },
-    totalSpent: { type: Number, default: 0 },
-    transactions: { type: [transactionSchema], default: [] },
-    bankDetails: { type: bankDetailsSchema, default: null },
-  },
-  { _id: false }
-);
-
 const userSchema = new Schema(
   {
     lastUpdatedAt: { type: Date, default: Date.now },
@@ -113,7 +100,14 @@ const userSchema = new Schema(
       required: true,
       default: userRole.CLIENT,
     },
-    clientDetails: { type: clientSchema, default: null },
+    companyName: { type: String, required: false, default: null },
+    website: { type: String, required: false, default: null },
+    industry: { type: String, required: false, default: null },
+    location: { type: String, required: false, default: null },
+    postedProjects: { type: [projectSchema], default: [] },
+    totalSpent: { type: Number, default: 0 },
+    transactions: { type: [transactionSchema], default: [] },
+    bankDetails: { type: bankDetailsSchema, default: null },
   },
   { versionKey: false }
 );

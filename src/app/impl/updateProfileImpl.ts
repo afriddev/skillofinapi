@@ -58,7 +58,7 @@ export async function updateProfileImpl(user: {
           { emailId },
           {
             $set: {
-              companyName: user?.data?.headline,
+              title: user?.data?.headline,
               description: user?.data?.summary,
             },
           }

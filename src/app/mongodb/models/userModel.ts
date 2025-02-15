@@ -33,7 +33,7 @@ const userSchema = new Schema(
     loggedIn: { type: Boolean, default: false },
     countryName: { type: String, default: null, required: false },
     currency: { type: String, default: null, required: false },
-    ioc: { type: String, default: null, required: false },
+    countryCode: { type: String, default: null, required: false },
 
     role: {
       type: String,

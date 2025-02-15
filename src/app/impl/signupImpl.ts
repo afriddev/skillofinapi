@@ -69,7 +69,7 @@ async function handleSignUpIMPL(
           ? userRole.CLIENT
           : userRole.FREELANCER,
 
-      ioc: user?.ioc,
+          countryCode: user?.countryCode,
       currency: user?.currency,
       countryName: user?.countryName,
     });

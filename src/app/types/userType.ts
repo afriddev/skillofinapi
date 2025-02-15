@@ -7,7 +7,7 @@ export type userSignUpPayloadType = {
   authToken?: string;
   otp?: string;
   role: "freelancer" | "client";
-  ioc: string;
+  countryCode: string;
   currency: string;
   countryName: string;
 };

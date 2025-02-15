@@ -11,6 +11,7 @@ import { userSignUpPayloadType } from "../types/userType";
 import { getOTP } from "../utils/appUtils";
 import { encodeString } from "../utils/auth/authHandlers";
 import { getAUthToken } from "../utils/auth/cookieHandlers";
+import moment from "moment-timezone";
 
 async function handleSignUpIMPL(
   user: userSignUpPayloadType
@@ -58,6 +59,10 @@ async function handleSignUpIMPL(
     user?.role?.toLowerCase() === "freelancer" ? freelancerModel : clientModel;
 
   try {
+    const timeZone = await getTimeZone(user?.countryCode);
+
+    const nowWithTimeZone = moment().tz(timeZone).format("hh:mm A");
+
     await userModel.create({
       emailId: user?.emailId,
       firstName: user?.firstName,
@@ -69,9 +74,9 @@ async function handleSignUpIMPL(
           ? userRole.CLIENT
           : userRole.FREELANCER,
 
-          countryCode: user?.countryCode,
+      countryCode: user?.countryCode,
       currency: user?.currency,
-      countryName: user?.countryName,
+      countryName: `${user?.countryName} - ${nowWithTimeZone}`,
     });
 
     await roleCollection.create({
@@ -91,3 +96,11 @@ async function handleSignUpIMPL(
 }
 
 export default handleSignUpIMPL;
+
+async function getTimeZone(alpha3: string) {
+  const response = await fetch(
+    `https://restcountries.com/v3.1/alpha/${alpha3}`
+  );
+  const data = await response.json();
+  return data[0]?.timezones[0] || "UTC"; // Default to UTC if not found
+}

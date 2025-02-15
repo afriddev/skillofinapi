@@ -1,7 +1,7 @@
 "use server";
 
 import { exceptionEnums } from "@/app/enums/responseEnums";
-import { updateProfileImpl } from "@/app/impl/updatePrfileImpl";
+import { updateProfileImpl } from "@/app/impl/updateProfileImpl";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {

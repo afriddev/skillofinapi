@@ -7,7 +7,7 @@ import freelancerModel, {
   LANGUAGE_ENUM,
 } from "../mongodb/models/freelancerModel";
 import userModel from "../mongodb/models/userModel";
-import { decodeString, encodeString } from "../utils/auth/authHandlers";
+import { decodeString } from "../utils/auth/authHandlers";
 
 export async function updateProfileImpl(user: {
   authToken: string;
@@ -20,17 +20,26 @@ export async function updateProfileImpl(user: {
 }> {
   await connectDB("users");
   const emailId = decodeString(user?.authToken);
-  console.log(emailId);
   const userData = await userModel.findOne({ emailId });
   if (!userData) {
     return { status: 200, message: userEnums.USER_NOT_FOUND };
   }
 
-const userAccountModel =
+  const userAccountModel =
     userData?.role === userRole.FREELANCER ? freelancerModel : clientModel;
 
   try {
     switch (user?.method) {
+      case "profileImage":
+        await userModel.updateOne(
+          { emailId },
+          {
+            $set: {
+              profile: user?.data?.image,
+            },
+          }
+        );
+        break;
       case "online":
         await userModel.updateOne(
           { emailId },
@@ -42,7 +51,7 @@ const userAccountModel =
         );
         break;
       case "title":
-        if(userData?.role === "CLIENT"){
+        if (userData?.role === "CLIENT") {
           break;
         }
         await userAccountModel.updateOne(

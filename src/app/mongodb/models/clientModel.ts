@@ -101,6 +101,7 @@ const userSchema = new Schema(
       default: userRole.CLIENT,
     },
     companyName: { type: String, required: false, default: null },
+    description: { type: String, required: false, default: null },
     website: { type: String, required: false, default: null },
     industry: { type: String, required: false, default: null },
     location: { type: String, required: false, default: null },

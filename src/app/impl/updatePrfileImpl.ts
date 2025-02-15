@@ -26,7 +26,7 @@ export async function updateProfileImpl(user: {
     return { status: 200, message: userEnums.USER_NOT_FOUND };
   }
 
-  const userAccountModel =
+const userAccountModel =
     userData?.role === userRole.FREELANCER ? freelancerModel : clientModel;
 
   try {
@@ -42,11 +42,14 @@ export async function updateProfileImpl(user: {
         );
         break;
       case "title":
+        if(userData?.role === "CLIENT"){
+          break;
+        }
         await userAccountModel.updateOne(
           { emailId },
           {
             $set: {
-              title: user?.data?.headline,
+              companyName: user?.data?.headline,
               description: user?.data?.summary,
             },
           }

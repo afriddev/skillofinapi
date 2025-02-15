@@ -95,7 +95,7 @@ export async function updateProfileImpl(user: {
           {
             $push: {
               languages: {
-                name: user?.data?.name,
+                name: user?.data?.language,
                 level:
                   user?.data?.level === "basic"
                     ? LANGUAGE_ENUM?.BASIC
@@ -108,6 +108,7 @@ export async function updateProfileImpl(user: {
             },
           }
         );
+        break;
       case "project":
         await userAccountModel.updateOne(
           { emailId },

@@ -7,11 +7,15 @@ export enum userRole {
 
 const messageSchema = new Schema(
   {
-    sender: { type: String, required: true }, 
-    receiver: { type: String, required: true }, 
+    sender: { type: String, required: true },
+    receiver: { type: String, required: true },
     content: { type: String, required: true },
     timestamp: { type: Date, default: Date.now },
-    status: { type: String, enum: ["SENT", "DELIVERED", "READ"], default: "SENT" },
+    status: {
+      type: String,
+      enum: ["SENT", "DELIVERED", "READ"],
+      default: "SENT",
+    },
   },
   { _id: false }
 );
@@ -27,6 +31,10 @@ const userSchema = new Schema(
     emailId: { type: String, required: true, unique: true },
     password: { type: String, required: false },
     loggedIn: { type: Boolean, default: false },
+    countryName: { type: String, default: null, required: false },
+    currency: { type: String, default: null, required: false },
+    ioc: { type: String, default: null, required: false },
+
     role: {
       type: String,
       enum: Object.values(userRole),

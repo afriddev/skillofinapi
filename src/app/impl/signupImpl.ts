@@ -68,6 +68,10 @@ async function handleSignUpIMPL(
         user?.role.toLowerCase() === "client"
           ? userRole.CLIENT
           : userRole.FREELANCER,
+
+      ioc: user?.ioc,
+      currency: user?.currency,
+      countryName: user?.countryName,
     });
 
     await roleCollection.create({

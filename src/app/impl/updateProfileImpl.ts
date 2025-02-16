@@ -52,7 +52,15 @@ export async function updateProfileImpl(user: {
         break;
       case "title":
         if (userData?.role === "CLIENT") {
-          break;
+          await userAccountModel.updateOne(
+            { emailId },
+            {
+              $set: {
+                companyName: user?.data?.headline,
+                description: user?.data?.summary,
+              },
+            }
+          );
         }
         await userAccountModel.updateOne(
           { emailId },

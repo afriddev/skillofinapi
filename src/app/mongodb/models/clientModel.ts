@@ -1,5 +1,5 @@
 import mongoose, { models, Schema } from "mongoose";
-import { isNullOrUndefined } from "util";
+import { BID_STATUS_ENUM, PAYMENT_STATUS_ENUM, PROJECT_STATUS_ENUM } from "./projectModel";
 
 export enum userRole {
   CLIENT = "CLIENT",
@@ -21,30 +21,66 @@ export enum PAYMENT_METHOD_ENUM {
 
 const bidSchema = new Schema(
   {
-    freelancerId: { type: String, required: true },
+    freelancerEmail: { type: String, required: true },
     bidAmount: { type: Number, required: true },
     coverLetter: { type: String, required: true },
     status: {
       type: String,
-      enum: ["PENDING", "ACCEPTED", "REJECTED"],
-      default: "PENDING",
+      enum: Object.values(BID_STATUS_ENUM),
+      default: BID_STATUS_ENUM.PENDING,
     },
     bidDate: { type: Date, default: Date.now },
   },
   { _id: false }
 );
 
+
+const milestoneSchema = new Schema({
+  description: { type: String, required: true },
+  amount: { type: Number, required: true },
+  dueDate: { type: Date, required: true },
+  status: {
+    type: String,
+    enum: Object.values(PAYMENT_STATUS_ENUM),
+    default: PAYMENT_STATUS_ENUM.PENDING,
+  },
+});
+
+const paymentSchema = new Schema({
+  freelancerEmail: { type: String, required: true },
+  amount: { type: Number, required: true },
+  status: {
+    type: String,
+    enum: Object.values(PAYMENT_STATUS_ENUM),
+    default: PAYMENT_STATUS_ENUM.PENDING,
+  },
+  paymentDate: { type: Date, default: null },
+});
+
 const projectSchema = new Schema(
   {
+    id: { type: String, required: true },
+    clientEmail: { type: String, required: true },
     title: { type: String, required: true },
-    description: { type: String, required: true },
+    description: { type: String, default: null },
     skillsRequired: [{ type: String, required: true }],
-    budget: { type: Number, required: true },
-    deadline: { type: Date, required: true },
-    postedAt: { type: Date, default: Date.now },
+    budget: { type: Number, required: false, default: 0 },
+    costPerHour: { type: Number, required: false, default: 0 },
+    deadline: { type: Date, required: false, default: null },
+    status: {
+      type: String,
+      enum: Object.values(PROJECT_STATUS_ENUM),
+      default: PROJECT_STATUS_ENUM.OPEN,
+    },
     bids: { type: [bidSchema], default: [] },
+    assignedFreelancerEmail: { type: String, default: null },
+    milestones: { type: [milestoneSchema], default: [] },
+    payments: { type: [paymentSchema], default: [] },
+    totalPaid: { type: Number, default: 0 },
+    createdAt: { type: Date, default: Date.now },
+    lastUpdatedAt: { type: Date, default: Date.now },
   },
-  { _id: false }
+  { versionKey: false }
 );
 
 const transactionSchema = new Schema(

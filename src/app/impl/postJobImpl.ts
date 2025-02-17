@@ -57,8 +57,7 @@ export async function postJobImpl(user: {
     { emailId },
     {
       $set: {
-        postedProjects: userPostedProjects,
-        lastUpdatedAt: getTodayDate(),
+        postedProjects: userPostedProjects
       },
     }
   );

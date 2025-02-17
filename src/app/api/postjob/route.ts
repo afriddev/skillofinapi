@@ -1,7 +1,7 @@
 "use server";
 
 import { exceptionEnums } from "@/app/enums/responseEnums";
-import { updateProfileImpl } from "@/app/impl/updateProfileImpl";
+import { postJobImpl } from "@/app/impl/postJobImpl";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -15,12 +15,13 @@ export async function POST(req: Request) {
       );
     }
 
-    const { message, status, data } = await updateProfileImpl(request);
+    const { message, status } = await postJobImpl(request);
 
-    const response = NextResponse.json({ message, data }, { status });
+    const response = NextResponse.json({ message }, { status });
 
     return response;
   } catch (error) {
+    console.log(error)
     return NextResponse.json(
       { message: exceptionEnums.SERVER_ERROR },
       { status: 500 }

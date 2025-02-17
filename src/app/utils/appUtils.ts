@@ -1,5 +1,5 @@
 export function getRandomId(): string {
-  return Math.random().toString(36).substr(2, 9);
+  return Math.random().toString(36).substr(2, 20);
 }
 
 export function getOTP(): number {

@@ -58,12 +58,14 @@ const paymentSchema = new Schema({
 
 const projectSchema = new Schema(
   {
+    id: { type: String, required: true },
     clientEmail: { type: String, required: true },
     title: { type: String, required: true },
     description: { type: String, default: null },
     skillsRequired: [{ type: String, required: true }],
-    budget: { type: Number, required: true },
-    deadline: { type: Date, required: true },
+    budget: { type: Number, required: false, default: 0 },
+    costPerHour: { type: Number, required: false, default: 0 },
+    deadline: { type: Date, required: false, default: null },
     status: {
       type: String,
       enum: Object.values(PROJECT_STATUS_ENUM),

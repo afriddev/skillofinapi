@@ -51,13 +51,14 @@ export async function postJobImpl(user: {
     return { status: 200, message: responseEnums?.ERROR };
   }
 
-  userPostedProjects.push(projectData);
+  // Add the new project at the beginning to sort by latest
+  userPostedProjects.unshift(projectData);
 
   await clientModel.updateOne(
     { emailId },
     {
       $set: {
-        postedProjects: userPostedProjects
+        postedProjects: userPostedProjects,
       },
     }
   );

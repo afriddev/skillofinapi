@@ -4,6 +4,7 @@ import connectDB from "@/app/mongodb/connectors/connectDB";
 import postModel from "@/app/mongodb/models/postModel";
 import userModel from "@/app/mongodb/models/userModel";
 import { decodeString } from "@/app/utils/auth/authHandlers";
+import { getAUthToken } from "@/app/utils/auth/cookieHandlers";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -26,6 +27,7 @@ export async function POST(req: Request) {
         title: request?.title,
         content: request?.content,
         profile: userData?.profile,
+        id:getAUthToken(20)
       });
       const myPosts = userData?.posts ?? [];
       myPosts.unshift(postData);

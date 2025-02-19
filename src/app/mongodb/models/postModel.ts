@@ -12,6 +12,7 @@ const commentSchema = new Schema(
 const postSchema = new Schema(
   {
     emailId: { type: String, required: true },
+    id: { type: String, required: true },
     title: { type: String, required: true },
     content: { type: String, required: true },
     profile: { type: String, required: true },

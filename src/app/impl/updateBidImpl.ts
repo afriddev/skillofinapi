@@ -45,7 +45,7 @@ export async function updateBidImpl(user: {
         status: BID_STATUS_ENUM?.PENDING,
         bidDate: new Date(),
         profile: userData?.profile,
-        name: userData?.fisrtName + (userData?.lastName ?? ""),
+        name: userData?.firstName + " "+(userData?.lastName ?? ""),
         read:0
       };
       bids.push(bidData);

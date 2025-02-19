@@ -2,7 +2,7 @@ import mongoose, { models, Schema } from "mongoose";
 
 const commentSchema = new Schema(
   {
-    userId: { type: String, required: true },
+    emailId: { type: String, required: true },
     commentText: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
   },
@@ -11,7 +11,8 @@ const commentSchema = new Schema(
 
 const postSchema = new Schema(
   {
-    userId: { type: String, required: true },
+    emailId: { type: String, required: true },
+    title: { type: String, required: true },
     content: { type: String, required: true },
     images: [{ type: String, default: null }],
     likes: { type: [String], default: [] },
@@ -21,6 +22,6 @@ const postSchema = new Schema(
   { versionKey: false }
 );
 
-const postModel = models.posts || mongoose.model("posts", postSchema);
+const postModel = models.allPosts || mongoose.model("allPosts", postSchema);
 
 export default postModel;

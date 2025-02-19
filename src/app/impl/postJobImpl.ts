@@ -3,12 +3,9 @@
 import { responseEnums, userEnums } from "../enums/responseEnums";
 import connectDB from "../mongodb/connectors/connectDB";
 import clientModel from "../mongodb/models/clientModel";
-import freelancerModel from "../mongodb/models/freelancerModel";
 import projectModel from "../mongodb/models/projectModel";
 import userModel from "../mongodb/models/userModel";
-import { sendOtp } from "../services/apiServices";
-import { getOTP, getRandomId, getTodayDate } from "../utils/appUtils";
-import { decodeString, encodeString } from "../utils/auth/authHandlers";
+import { decodeString } from "../utils/auth/authHandlers";
 import { getAUthToken } from "../utils/auth/cookieHandlers";
 
 export async function postJobImpl(user: {
@@ -51,7 +48,6 @@ export async function postJobImpl(user: {
     return { status: 200, message: responseEnums?.ERROR };
   }
 
-  // Add the new project at the beginning to sort by latest
   userPostedProjects.unshift(projectData);
 
   await clientModel.updateOne(

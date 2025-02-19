@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     const emailId = decodeString(request?.authToken);
 
     try {
-      await connectDB("posts");
+      await connectDB("users");
       await postModel.create({
         emailId,
         title: request?.title,

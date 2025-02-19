@@ -29,8 +29,9 @@ export async function getMeIMPL(user: {
     userData.role === userRole.FREELANCER ? freelancerModel : clientModel;
 
   const userAccountData = await userAccountModel.findOne({ emailId });
-  await connectDB("posts");
+
   const posts = await postModel.find().sort({ createdAt: -1 });
+  console.log(posts)
 
 
 

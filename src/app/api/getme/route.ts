@@ -16,7 +16,6 @@ export async function POST(req: Request) {
     }
 
     const { message, status, data } = await getMeIMPL(request);
-    console.log(data)
 
     const response = NextResponse.json({ message, data }, { status });
 

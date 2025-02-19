@@ -34,7 +34,7 @@ export async function POST(req: Request) {
         { emailId },
         {
           $set: {
-            postst: myPosts,
+            posts: myPosts,
           },
         }
       );

@@ -1,7 +1,7 @@
 "use server";
 
 import { exceptionEnums } from "@/app/enums/responseEnums";
-import { submitBidImpl } from "@/app/impl/submitBid";
+import { updateBidImpl } from "@/app/impl/updateBidImpl";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -20,7 +20,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const { message, status } = await submitBidImpl(request);
+    const { message, status } = await updateBidImpl(request);
 
     const response = NextResponse.json({ message }, { status });
 

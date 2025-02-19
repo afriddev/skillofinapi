@@ -14,10 +14,12 @@ const postSchema = new Schema(
     emailId: { type: String, required: true },
     title: { type: String, required: true },
     content: { type: String, required: true },
+    profile: { type: String, required: true },
     images: [{ type: String, default: null }],
     likes: { type: [String], default: [] },
     comments: { type: [commentSchema], default: [] },
     createdAt: { type: Date, default: Date.now },
+    
   },
   { versionKey: false, timestamps: true }
 );

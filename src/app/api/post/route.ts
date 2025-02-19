@@ -2,6 +2,7 @@
 import { exceptionEnums, responseEnums } from "@/app/enums/responseEnums";
 import connectDB from "@/app/mongodb/connectors/connectDB";
 import postModel from "@/app/mongodb/models/postModel";
+import userModel from "@/app/mongodb/models/userModel";
 import { decodeString } from "@/app/utils/auth/authHandlers";
 import { NextResponse } from "next/server";
 
@@ -20,10 +21,12 @@ export async function POST(req: Request) {
 
     try {
       await connectDB("users");
+      const userData = await userModel?.findOne({emailId});
       await postModel.create({
         emailId,
         title: request?.title,
         content: request?.content,
+        profile:userData?.profile
       });
       const posts = await postModel.find().sort({ createdAt: -1 });
       return NextResponse.json(

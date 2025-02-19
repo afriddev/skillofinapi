@@ -24,6 +24,10 @@ const bidSchema = new Schema(
     freelancerEmail: { type: String, required: true },
     bidAmount: { type: Number, required: true },
     coverLetter: { type: String, required: true },
+    profile: { type: String, required: false },
+    name: { type: String, required: false },
+    read: { type: Number, required: false },
+
     status: {
       type: String,
       enum: Object.values(BID_STATUS_ENUM),

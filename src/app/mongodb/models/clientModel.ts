@@ -29,6 +29,10 @@ const bidSchema = new Schema(
       enum: Object.values(BID_STATUS_ENUM),
       default: BID_STATUS_ENUM.PENDING,
     },
+    profile: { type: String, required: false },
+    name: { type: String, required: false },
+    read: { type: Number, required: false },
+
     bidDate: { type: Date, default: Date.now },
   },
   { _id: false }

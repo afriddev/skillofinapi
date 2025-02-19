@@ -44,6 +44,9 @@ export async function updateBidImpl(user: {
         coverLetter: user?.bidDescription,
         status: BID_STATUS_ENUM?.PENDING,
         bidDate: new Date(),
+        profile: userData?.profile,
+        name: userData?.fisrtName + (userData?.lastName ?? ""),
+        read:0
       };
       bids.push(bidData);
     }

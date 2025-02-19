@@ -31,7 +31,6 @@ export async function getMeIMPL(user: {
   const userAccountData = await userAccountModel.findOne({ emailId });
 
   const posts = await postModel.find().sort({ createdAt: -1 });
-  console.log(posts)
 
 
 

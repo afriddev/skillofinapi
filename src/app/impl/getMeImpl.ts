@@ -9,9 +9,13 @@ import { decodeString } from "../utils/auth/authHandlers";
 
 export async function getMeIMPL(user: {
   authToken: string;
+  emailId: string;
 }): Promise<{ status: number; message: any; data?: any }> {
   await connectDB("users");
-  const emailId = decodeString(user.authToken);
+  let emailId;
+  if (user?.authToken && !user?.emailId) emailId = decodeString(user.authToken);
+  else emailId = user?.emailId;
+
   const userData = await userModel.findOne({ emailId: emailId });
 
   if (!userData) {

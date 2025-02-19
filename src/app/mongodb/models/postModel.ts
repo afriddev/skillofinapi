@@ -19,7 +19,7 @@ const postSchema = new Schema(
     comments: { type: [commentSchema], default: [] },
     createdAt: { type: Date, default: Date.now },
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: true }
 );
 
 const postModel = models.allPosts || mongoose.model("allPosts", postSchema);

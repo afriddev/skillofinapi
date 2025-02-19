@@ -25,9 +25,11 @@ export async function POST(req: Request) {
         title: request?.title,
         content: request?.content,
       });
+      const posts = await postModel.find().sort({ createdAt: -1 });
       return NextResponse.json(
         {
           message: responseEnums?.SUCCESS,
+          posts,
         },
         {
           status: 200,

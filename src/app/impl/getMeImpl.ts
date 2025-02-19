@@ -40,7 +40,7 @@ export async function getMeIMPL(user: {
     data: {
       userData,
       userAccountData,
-      posts
+      allPosts:posts
     },
   };
 }

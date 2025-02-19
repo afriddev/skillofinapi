@@ -19,6 +19,28 @@ const messageSchema = new Schema(
   },
   { _id: false }
 );
+const commentSchema = new Schema(
+  {
+    emailId: { type: String, required: true },
+    commentText: { type: String, required: true },
+    createdAt: { type: Date, default: Date.now },
+  },
+  { _id: false }
+);
+
+const postSchema = new Schema(
+  {
+    emailId: { type: String, required: true },
+    title: { type: String, required: true },
+    content: { type: String, required: true },
+    profile: { type: String, required: true },
+    images: [{ type: String, default: null }],
+    likes: { type: [String], default: [] },
+    comments: { type: [commentSchema], default: [] },
+    createdAt: { type: Date, default: Date.now },
+  },
+  { versionKey: false, timestamps: true }
+);
 
 const userSchema = new Schema(
   {
@@ -34,6 +56,7 @@ const userSchema = new Schema(
     countryName: { type: String, default: null, required: false },
     currency: { type: String, default: null, required: false },
     countryCode: { type: String, default: null, required: false },
+    posts: { type: [postSchema], required: false, default: null },
 
     role: {
       type: String,

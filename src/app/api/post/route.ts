@@ -18,16 +18,27 @@ export async function POST(req: Request) {
     }
 
     const emailId = decodeString(request?.authToken);
-
     try {
       await connectDB("users");
-      const userData = await userModel?.findOne({emailId});
-      await postModel.create({
+      const userData = await userModel?.findOne({ emailId });
+      const postData = await postModel.create({
         emailId,
         title: request?.title,
         content: request?.content,
-        profile:userData?.profile
+        profile: userData?.profile,
       });
+      const myPosts = userData?.posts ?? [];
+      myPosts.unshift(postData);
+
+      await userModel?.updateOne(
+        { emailId },
+        {
+          $set: {
+            postst: myPosts,
+          },
+        }
+      );
+
       const posts = await postModel.find().sort({ createdAt: -1 });
       return NextResponse.json(
         {

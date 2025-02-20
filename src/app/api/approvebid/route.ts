@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     return response;
   } catch (error) {
     return NextResponse.json(
-      { message: exceptionEnums.SERVER_ERROR },
+      { message: exceptionEnums.SERVER_ERROR,error },
       { status: 500 }
     );
   }

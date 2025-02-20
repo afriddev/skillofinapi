@@ -76,7 +76,7 @@ export async function approveBidImpl(user: {
   </div>
 `;
 
-await fetch("http://localhost:3000/api/chat", {
+await fetch("https://skillofinapi.vercel.app/api/chat", {
   method: "POST",
   headers: {
     "Content-Type": "application/json",

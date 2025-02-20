@@ -2,11 +2,6 @@ import mongoose, { models, Schema } from "mongoose";
 
 const contactedUsersSchema = new Schema(
   {
-    createdAt: {
-      type: String,
-      required: false,
-      default: null,
-    },
     emailId: {
       type: String,
       required: true,
@@ -27,6 +22,7 @@ const contactedUsersSchema = new Schema(
   },
   {
     versionKey: false,
+    timestamps: true
   }
 );
 

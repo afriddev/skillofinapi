@@ -33,13 +33,15 @@ const projectSchema = new Schema({
   links: [{ type: String, default: null }],
   startDate: { type: Date, default: null },
   endDate: { type: Date, default: null },
+},{
+  timestamps: true
 });
 const educationSchema = new Schema({
   name: { type: String, required: true },
   description: { type: String, default: null },
   startDate: { type: String, default: null },
   endDate: { type: String, default: null },
-});
+},{timestamps: true});
 
 const bidSchema = new Schema({
   projectId: { type: Schema.Types.ObjectId, required: true },
@@ -51,6 +53,8 @@ const bidSchema = new Schema({
     default: "PENDING",
   },
   submittedAt: { type: Date, default: Date.now },
+},{
+  timestamps: true
 });
 
 const transactionSchema = new Schema({
@@ -62,6 +66,8 @@ const transactionSchema = new Schema({
     enum: Object.values(TRANSACTION_STATUS_ENUM),
     default: TRANSACTION_STATUS_ENUM.PENDING,
   },
+},{
+  timestamps: true
 });
 
 const bankDetailsSchema = new Schema({
@@ -71,6 +77,8 @@ const bankDetailsSchema = new Schema({
   swiftCode: { type: String, default: null },
   ifscCode: { type: String, default: null },
   linkedEmail: { type: String, required: true },
+},{
+  timestamps: true
 });
 const employmentSchema = new Schema({
   companyName: { type: String, required: true },
@@ -79,6 +87,8 @@ const employmentSchema = new Schema({
   endDate: { type: String, default: null },
   currentlyWorking: { type: Boolean, default: false },
   description: { type: String, default: null },
+},{
+  timestamps: true
 });
 
 const kycSchema = new Schema({
@@ -92,11 +102,15 @@ const kycSchema = new Schema({
   },
   submittedAt: { type: Date, default: Date.now },
   verifiedAt: { type: Date, default: null },
+},{
+  timestamps: true
 });
 
 const skillSchema = new Schema({
   name: { type: String, required: true },
   proficiency: { type: Number, min: 1, max: 5, required: false, default: 3 },
+},{
+  timestamps: true
 });
 
 const certificationSchema = new Schema({
@@ -106,6 +120,8 @@ const certificationSchema = new Schema({
   issueDate: { type: Date, default: null },
   expiryDate: { type: Date, default: null },
   credentialUrl: { type: String, default: null },
+},{
+  timestamps: true
 });
 
 const testScoreSchema = new Schema({
@@ -113,12 +129,12 @@ const testScoreSchema = new Schema({
   testName: { type: String, required: true },
   score: { type: Number, required: true },
   dateTaken: { type: Date, default: null },
+},{
+  timestamps: true
 });
 
 const freelancerSchema = new Schema(
   {
-    lastUpdatedAt: { type: Date, default: Date.now },
-    createdAt: { type: Date, default: Date.now },
     role: {
       type: String,
       enum: Object.values(userRole),
@@ -175,7 +191,7 @@ const freelancerSchema = new Schema(
     withdrawalHistory: { type: [transactionSchema], default: [] },
     bankDetails: { type: bankDetailsSchema, default: null },
   },
-  { versionKey: false }
+  { versionKey: false,timestamps: true }
 );
 
 const freelancerModel =

@@ -17,7 +17,6 @@ export async function POST(req: Request) {
       if (!alreadyContactedUser)
       {
         await contactedUsersModel.create({
-          createdAt: getTodayDate(),
           emailId,
           message:"",
           phone,

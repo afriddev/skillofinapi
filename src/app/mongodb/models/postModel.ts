@@ -4,9 +4,8 @@ const commentSchema = new Schema(
   {
     emailId: { type: String, required: true },
     commentText: { type: String, required: true },
-    createdAt: { type: Date, default: Date.now },
   },
-  { _id: false }
+  { _id: false,timestamps: true }
 );
 
 const postSchema = new Schema(
@@ -19,7 +18,6 @@ const postSchema = new Schema(
     images: [{ type: String, default: null }],
     likes: { type: [String], default: [] },
     comments: { type: [commentSchema], default: [] },
-    createdAt: { type: Date, default: Date.now },
     
   },
   { versionKey: false, timestamps: true }

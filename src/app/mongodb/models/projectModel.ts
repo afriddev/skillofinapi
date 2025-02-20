@@ -35,7 +35,7 @@ const bidSchema = new Schema(
     },
     bidDate: { type: Date, default: Date.now },
   },
-  { _id: false }
+  { _id: false,timestamps: true }
 );
 
 const milestoneSchema = new Schema({
@@ -47,18 +47,25 @@ const milestoneSchema = new Schema({
     enum: Object.values(PAYMENT_STATUS_ENUM),
     default: PAYMENT_STATUS_ENUM.PENDING,
   },
+},{
+  timestamps: true
 });
 
-const paymentSchema = new Schema({
-  freelancerEmail: { type: String, required: true },
-  amount: { type: Number, required: true },
-  status: {
-    type: String,
-    enum: Object.values(PAYMENT_STATUS_ENUM),
-    default: PAYMENT_STATUS_ENUM.PENDING,
+const paymentSchema = new Schema(
+  {
+    freelancerEmail: { type: String, required: true },
+    amount: { type: Number, required: true },
+    status: {
+      type: String,
+      enum: Object.values(PAYMENT_STATUS_ENUM),
+      default: PAYMENT_STATUS_ENUM.PENDING,
+    },
+    paymentDate: { type: Date, default: null },
   },
-  paymentDate: { type: Date, default: null },
-});
+  {
+    timestamps: true,
+  }
+);
 
 const projectSchema = new Schema(
   {
@@ -80,10 +87,8 @@ const projectSchema = new Schema(
     milestones: { type: [milestoneSchema], default: [] },
     payments: { type: [paymentSchema], default: [] },
     totalPaid: { type: Number, default: 0 },
-    createdAt: { type: Date, default: Date.now },
-    lastUpdatedAt: { type: Date, default: Date.now },
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: true }
 );
 
 const projectModel =

@@ -35,7 +35,7 @@ const bidSchema = new Schema(
 
     bidDate: { type: Date, default: Date.now },
   },
-  { _id: false }
+  { _id: false,timestamps: true }
 );
 
 
@@ -48,6 +48,8 @@ const milestoneSchema = new Schema({
     enum: Object.values(PAYMENT_STATUS_ENUM),
     default: PAYMENT_STATUS_ENUM.PENDING,
   },
+},{
+  timestamps: true
 });
 
 const paymentSchema = new Schema({
@@ -59,6 +61,8 @@ const paymentSchema = new Schema({
     default: PAYMENT_STATUS_ENUM.PENDING,
   },
   paymentDate: { type: Date, default: null },
+},{
+  timestamps: true
 });
 
 const projectSchema = new Schema(
@@ -81,10 +85,8 @@ const projectSchema = new Schema(
     milestones: { type: [milestoneSchema], default: [] },
     payments: { type: [paymentSchema], default: [] },
     totalPaid: { type: Number, default: 0 },
-    createdAt: { type: Date, default: Date.now },
-    lastUpdatedAt: { type: Date, default: Date.now },
   },
-  { versionKey: false }
+  { versionKey: false ,timestamps: true}
 );
 
 const transactionSchema = new Schema(
@@ -109,7 +111,7 @@ const transactionSchema = new Schema(
     projectId: { type: String, default: null },
     freelancerId: { type: String, default: null },
   },
-  { _id: false }
+  { _id: false,timestamps: true }
 );
 
 const bankDetailsSchema = new Schema(
@@ -121,13 +123,11 @@ const bankDetailsSchema = new Schema(
     ifscCode: { type: String, default: null },
     linkedEmail: { type: String, required: true },
   },
-  { _id: false }
+  { _id: false ,timestamps: true}
 );
 
 const userSchema = new Schema(
   {
-    lastUpdatedAt: { type: Date, default: Date.now },
-    createdAt: { type: Date, default: Date.now },
     authToken: { type: String },
     otp: { type: Number },
     firstName: { type: String, required: true },
@@ -150,7 +150,7 @@ const userSchema = new Schema(
     transactions: { type: [transactionSchema], default: [] },
     bankDetails: { type: bankDetailsSchema, default: null },
   },
-  { versionKey: false }
+  { versionKey: false,timestamps: true }
 );
 
 const clientModel = models.clients || mongoose.model("clients", userSchema);

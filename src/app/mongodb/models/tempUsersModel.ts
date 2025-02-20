@@ -5,6 +5,7 @@ const tempUsersSchema = new Schema({
   otp: Number,
 },{
   versionKey: false,
+  timestamps: true
 });
 
 const tempUsersModel =

@@ -17,15 +17,14 @@ const messageSchema = new Schema(
       default: "SENT",
     },
   },
-  { _id: false }
+  { _id: false,timestamps: true }
 );
 const commentSchema = new Schema(
   {
     emailId: { type: String, required: true },
     commentText: { type: String, required: true },
-    createdAt: { type: Date, default: Date.now },
   },
-  { _id: false }
+  { _id: false ,timestamps: true}
 );
 
 const postSchema = new Schema(
@@ -37,16 +36,13 @@ const postSchema = new Schema(
     profile: { type: String, required: true },
     images: [{ type: String, default: null }],
     likes: { type: [String], default: [] },
-    comments: { type: [commentSchema], default: [] },
-    createdAt: { type: Date, default: Date.now },
+    comments: { type: [commentSchema], default: [] }
   },
   { versionKey: false, timestamps: true }
 );
 
 const userSchema = new Schema(
   {
-    lastUpdatedAt: { type: Date, default: Date.now },
-    createdAt: { type: Date, default: Date.now },
     authToken: { type: String, required: false, default: "" },
     otp: { type: Number },
     firstName: { type: String, required: true },
@@ -72,7 +68,7 @@ const userSchema = new Schema(
       default: {},
     },
   },
-  { versionKey: false }
+  { versionKey: false,timestamps: true }
 );
 
 const userModel = models.users || mongoose.model("users", userSchema);

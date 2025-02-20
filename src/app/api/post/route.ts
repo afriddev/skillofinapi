@@ -26,7 +26,7 @@ export async function POST(req: Request) {
         emailId,
         title: request?.title,
         content: request?.content,
-        profile: userData?.profile,
+        profile: userData?.profile ,
         id:getAUthToken(20)
       });
       const myPosts = userData?.posts ?? [];
@@ -52,9 +52,10 @@ export async function POST(req: Request) {
         }
       );
     } catch (e) {
+      console.log(e)
       return NextResponse.json(
         {
-          message: responseEnums?.SUCCESS,
+          message: responseEnums?.ERROR,
         },
         {
           status: 200,

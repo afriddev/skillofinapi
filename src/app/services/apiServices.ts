@@ -16,7 +16,7 @@ export async function sendOtp(emailId: string, otp:number,method?: "LOGIN" | "SI
       body: `Your verification code for ${
         method === "LOGIN" ? "Login" : "Sign up"
       } ${otp}`,
-      title: "Track me ",
+      title: "Skillofin ",
       subject: `Otp for ${method === "LOGIN" ? "Login" : "Sign Up"}`,
     }),
   });

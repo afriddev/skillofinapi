@@ -14,7 +14,7 @@ const postSchema = new Schema(
     id: { type: String, required: true },
     title: { type: String, required: true },
     content: { type: String, required: true },
-    profile: { type: String, required: true },
+    profile: { type: String, required: false,default:null },
     images: [{ type: String, default: null }],
     likes: { type: [String], default: [] },
     comments: { type: [commentSchema], default: [] },

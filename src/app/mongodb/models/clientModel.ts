@@ -47,7 +47,7 @@ const milestoneSchema = new Schema(
   {
     description: { type: String, required: true },
     amount: { type: Number, required: true },
-    dueDate: { type: Date, required: true },
+    dueDate: { type: String, required: true },
     status: {
       type: String,
       enum: Object.values(PAYMENT_STATUS_ENUM),

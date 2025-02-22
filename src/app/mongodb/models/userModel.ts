@@ -5,20 +5,7 @@ export enum userRole {
   FREELANCER = "FREELANCER",
 }
 
-const messageSchema = new Schema(
-  {
-    sender: { type: String, required: true },
-    receiver: { type: String, required: true },
-    content: { type: String, required: true },
-    timestamp: { type: Date, default: Date.now },
-    status: {
-      type: String,
-      enum: ["SENT", "DELIVERED", "READ"],
-      default: "SENT",
-    },
-  },
-  { _id: false, timestamps: true }
-);
+
 const commentSchema = new Schema(
   {
     emailId: { type: String, required: true },

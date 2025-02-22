@@ -2,6 +2,7 @@ import { responseEnums, userEnums } from "../enums/responseEnums";
 import connectDB from "../mongodb/connectors/connectDB";
 import clientModel, { userRole } from "../mongodb/models/clientModel";
 import freelancerModel from "../mongodb/models/freelancerModel";
+import projectModel from "../mongodb/models/projectModel";
 import userModel from "../mongodb/models/userModel";
 import { decodeString } from "../utils/auth/authHandlers";
 
@@ -9,12 +10,13 @@ export async function chatImpl(user: {
   authToken: string;
   receiver: string;
   message: string;
+  project?: any;
 }): Promise<{ status: number; message: any; data?: any }> {
   await connectDB("users");
 
   const emailId = decodeString(user.authToken);
   const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/;
-  const phoneRegex = /\b\d{10,}\b/; 
+  const phoneRegex = /\b\d{10,}\b/;
 
   if (emailRegex.test(user.message) || phoneRegex.test(user.message)) {
     return {
@@ -41,16 +43,24 @@ export async function chatImpl(user: {
     sender: emailId.replace(/\./g, "_"),
     receiver: user.receiver.replace(/\./g, "_"),
     content: user.message,
-    status: "SENT", 
+    status: "SENT",
     timestamp: new Date(),
   };
 
   senderMessages.push(newMessage);
+  let projetData = {};
+  if (user?.project) {
+    projetData = (await projectModel.findOne({ id: user?.project })) ?? {};
+  }
 
   const path = `messages.${user.receiver.replace(/\./g, "_")}.messages`;
   const pathName = `messages.${user.receiver.replace(/\./g, "_")}.name`;
   const pathProfile = `messages.${user.receiver.replace(/\./g, "_")}.profile`;
   const pathProfileRead = `messages.${user.receiver.replace(/\./g, "_")}.read`;
+  const assignedProjectData = `messages.${user.receiver.replace(
+    /\./g,
+    "_"
+  )}.project`;
 
   await userModel.updateOne(
     { emailId: emailId },
@@ -61,6 +71,7 @@ export async function chatImpl(user: {
           receiverData?.firstName + " " + (receiverData?.lastName ?? ""),
         [pathProfile]: receiverData?.profile,
         [pathProfileRead]: senderMessages.length,
+        [assignedProjectData]: projetData,
       },
     }
   );
@@ -72,11 +83,11 @@ export async function chatImpl(user: {
     sender: emailId,
     receiver: user.receiver.replace(/\./g, "_"),
     content: user.message,
-    status: "SENT", 
+    status: "SENT",
     timestamp: new Date(),
   };
 
-  receiverMessages.push(newReceiverMessage); 
+  receiverMessages.push(newReceiverMessage);
 
   await userModel.updateOne(
     { emailId: user.receiver },
@@ -90,6 +101,8 @@ export async function chatImpl(user: {
 
         [`messages.${emailId.replace(/\./g, "_")}.read`]:
           receiverData?.messages[emailId.replace(/\./g, "_")]?.read ?? 0,
+
+        [`messages.${emailId.replace(/\./g, "_")}.project`]: projetData,
       },
     }
   );

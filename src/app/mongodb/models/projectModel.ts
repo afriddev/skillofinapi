@@ -72,7 +72,7 @@ export enum PROJECT_TYPE_ENUM {
 }
 
 
-const projectSchema = new Schema(
+export const projectSchema = new Schema(
   {
     id: { type: String, required: true },
     clientEmail: { type: String, required: true },

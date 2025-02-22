@@ -53,7 +53,7 @@ export async function approveBidImpl(user: {
     { emailId },
     {
       $set: {
-        "postedProjects.$[proj].bids": projectData.bids, 
+        "postedProjects.$[proj].bids": projectData.bids,
         "postedProjects.$[proj].status": PROJECT_STATUS_ENUM.IN_PROGRESS,
       },
     },
@@ -63,30 +63,34 @@ export async function approveBidImpl(user: {
   );
 
   const notificationMessage = `
-  <div style="font-family: Arial, sans-serif; background-color: #222; color: white; padding: 15px; border-radius: 8px;">
-    <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #ffcc00;">
+  <div style="font-family: Arial, sans-serif; background-color: #fff; color: #000; padding: 12px; border: 1px solid #ccc; border-radius: 6px;">
+    <h3 style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #007bff;">
       Job Application Approved
     </h3>
-    <p style="font-size: 14px; margin-bottom: 10px;">
-      Congratulations! Your job application has been approved. Below are the details:
+    <p style="font-size: 12px; margin-bottom: 8px;">
+      Congratulations! Your job application has been approved. Details are below:
     </p>
-    <p><strong>Project Title:</strong> ${projectData?.title}</p>
-    <p><strong>Project Description:</strong> ${projectData?.description}</p>
-    <p><strong>Approved By:</strong> ${emailId}</p>
+    <p style="font-size: 12px;"><strong style="color: #28a745;">Project Title:</strong> ${projectData?.title}</p>
+    <p style="font-size: 12px;"><strong style="color: #28a745;">Project Description:</strong> ${projectData?.description}</p>
   </div>
 `;
 
-await fetch("https://skillofinapi.vercel.app/api/chat", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    message: notificationMessage.trim(),
-    receiver: user?.freelancerEmailId,
-    authToken: user?.authToken,
-  }),
-});
+  const BASE_URL = "https://skillofinapi.vercel.app/api" 
+  // const BASE_URL = "http://localhost:3000/api";
+
+  await fetch(BASE_URL + "/chat", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      message: notificationMessage.trim(),
+      receiver: user?.freelancerEmailId,
+      authToken: user?.authToken,
+      project: projectData?.id,
+    }),
+  });
+
 
   return { status: 200, message: responseEnums?.SUCCESS };
 }

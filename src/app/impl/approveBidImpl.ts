@@ -45,6 +45,7 @@ export async function approveBidImpl(user: {
       $set: {
         bids: projectData.bids,
         status: PROJECT_STATUS_ENUM.IN_PROGRESS,
+        assignedFreelancerEmail: user?.freelancerEmailId,
       },
     }
   );

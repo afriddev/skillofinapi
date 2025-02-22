@@ -2,7 +2,7 @@
 
 import { responseEnums } from "../enums/responseEnums";
 
-export async function sendOtp(emailId: string, otp:number,method?: "LOGIN" | "SIGNUP"):Promise<responseEnums> {
+export async function sendOtp(emailId: string, otp:number,method?: "LOGIN" | "SIGNUP" |"RESET_PASSWORD"):Promise<responseEnums> {
   const url = "https://freeemailapi.vercel.app/sendEmail/";
 
   const response = await fetch(url, {
@@ -14,10 +14,10 @@ export async function sendOtp(emailId: string, otp:number,method?: "LOGIN" | "SI
     body: JSON.stringify({
       toEmail: emailId,
       body: `Your verification code for ${
-        method === "LOGIN" ? "Login" : "Sign up"
+        method === "LOGIN" ? "Login" :method==="RESET_PASSWORD"?"Reset password": "Sign up"
       } ${otp}`,
       title: "Skillofin ",
-      subject: `Otp for ${method === "LOGIN" ? "Login" : "Sign Up"}`,
+      subject: `Otp for ${method === "LOGIN" ? "Login" : method==="RESET_PASSWORD"?"Reset password": "Sign Up"}`,
     }),
   });
   const result = await response.json();

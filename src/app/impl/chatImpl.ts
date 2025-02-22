@@ -1,4 +1,4 @@
-import { responseEnums } from "../enums/responseEnums";
+import { responseEnums, userEnums } from "../enums/responseEnums";
 import connectDB from "../mongodb/connectors/connectDB";
 import clientModel, { userRole } from "../mongodb/models/clientModel";
 import freelancerModel from "../mongodb/models/freelancerModel";
@@ -13,34 +13,39 @@ export async function chatImpl(user: {
   await connectDB("users");
 
   const emailId = decodeString(user.authToken);
+  const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/;
+  const phoneRegex = /\b\d{10,}\b/; 
 
-  // Find the sender's user data
+  if (emailRegex.test(user.message) || phoneRegex.test(user.message)) {
+    return {
+      status: 200,
+      message: userEnums?.CONTACT_INFO_NOT_ALLOWED,
+    };
+  }
+
   const senderData = await userModel.findOne({ emailId: emailId });
 
-  // Find the receiver's user data
   const receiverData = await userModel.findOne({ emailId: user.receiver });
 
   if (!senderData || !receiverData) {
     return {
       status: 404,
-      message: "User not found",
+      message: userEnums.USER_NOT_FOUND,
     };
   }
 
-  // Sender's messages
   const senderMessages =
     senderData?.messages[user.receiver.replace(/\./g, "_")]?.messages || [];
 
-  // Construct the new message
   const newMessage = {
     sender: emailId.replace(/\./g, "_"),
     receiver: user.receiver.replace(/\./g, "_"),
     content: user.message,
-    status: "SENT", // Default status for new messages
+    status: "SENT", 
     timestamp: new Date(),
   };
 
-  senderMessages.push(newMessage); // Add the new message to sender's messages
+  senderMessages.push(newMessage);
 
   const path = `messages.${user.receiver.replace(/\./g, "_")}.messages`;
   const pathName = `messages.${user.receiver.replace(/\./g, "_")}.name`;
@@ -60,22 +65,19 @@ export async function chatImpl(user: {
     }
   );
 
-  // Receiver's messages
   const receiverMessages =
     receiverData?.messages[emailId.replace(/\./g, "_")]?.messages || [];
 
-  // Add the same message to the receiver's messages
   const newReceiverMessage = {
     sender: emailId,
     receiver: user.receiver.replace(/\./g, "_"),
     content: user.message,
-    status: "SENT", // Default status
+    status: "SENT", 
     timestamp: new Date(),
   };
 
-  receiverMessages.push(newReceiverMessage); // Add message to receiver's messages
+  receiverMessages.push(newReceiverMessage); 
 
-  // Update receiver's messages (push new message to the specific sender's key)
   await userModel.updateOne(
     { emailId: user.receiver },
     {

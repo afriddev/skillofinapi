@@ -66,6 +66,11 @@ const paymentSchema = new Schema(
     timestamps: true,
   }
 );
+export enum PROJECT_TYPE_ENUM {
+  PROJECT="PROJECT",
+  JOB="JOB"
+}
+
 
 const projectSchema = new Schema(
   {
@@ -82,11 +87,17 @@ const projectSchema = new Schema(
       enum: Object.values(PROJECT_STATUS_ENUM),
       default: PROJECT_STATUS_ENUM.OPEN,
     },
+    projectType: {
+      type: String,
+      enum: Object.values(PROJECT_TYPE_ENUM),
+      required: true,
+    },
     bids: { type: [bidSchema], default: [] },
     assignedFreelancerEmail: { type: String, default: null },
     milestones: { type: [milestoneSchema], default: [] },
     payments: { type: [paymentSchema], default: [] },
     totalPaid: { type: Number, default: 0 },
+
   },
   { versionKey: false, timestamps: true }
 );

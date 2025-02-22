@@ -19,47 +19,54 @@ export async function POST(req: Request) {
     }
 
     const emailId = decodeString(request?.authToken);
+
     try {
       await connectDB("users");
+
       const userData = await userModel?.findOne({ emailId });
+      const userProfile = userData?.profile || "";
+
       const postData = await postModel.create({
         emailId,
         title: request?.title,
         content: request?.content,
-        profile: userData?.profile ,
-        id:getAUthToken(20)
+        profile: userProfile,
+        id: getAUthToken(20),
+        image: request?.image ?? null,
+        name: userData?.firstName + (userData?.lastName ? " " + userData?.lastName : ""),
       });
+
       const myPosts = userData?.posts ?? [];
       myPosts.unshift(postData);
 
+      for (const post of myPosts) {
+        post.profile = userProfile;
+      }
+
       await userModel?.updateOne(
         { emailId },
-        {
-          $set: {
-            posts: myPosts,
-          },
-        }
+        { $set: { posts: myPosts } }
+      );
+
+      await postModel.updateMany(
+        { emailId },
+        { $set: { profile: userProfile } }
       );
 
       const posts = await postModel.find().sort({ createdAt: -1 });
+
       return NextResponse.json(
         {
           message: responseEnums?.SUCCESS,
           posts,
         },
-        {
-          status: 200,
-        }
+        { status: 200 }
       );
     } catch (e) {
-      console.log(e)
+      console.error(e);
       return NextResponse.json(
-        {
-          message: responseEnums?.ERROR,
-        },
-        {
-          status: 200,
-        }
+        { message: responseEnums?.ERROR },
+        { status: 500 }
       );
     }
   } catch (error) {

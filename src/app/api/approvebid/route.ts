@@ -2,7 +2,6 @@
 
 import { exceptionEnums } from "@/app/enums/responseEnums";
 import { approveBidImpl } from "@/app/impl/approveBidImpl";
-import { postJobImpl } from "@/app/impl/postJobImpl";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {

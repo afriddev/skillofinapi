@@ -1,5 +1,10 @@
 import mongoose, { models, Schema } from "mongoose";
-import { BID_STATUS_ENUM, PAYMENT_STATUS_ENUM, PROJECT_STATUS_ENUM } from "./projectModel";
+import {
+  BID_STATUS_ENUM,
+  PAYMENT_STATUS_ENUM,
+  PROJECT_STATUS_ENUM,
+  PROJECT_TYPE_ENUM,
+} from "./projectModel";
 
 export enum userRole {
   CLIENT = "CLIENT",
@@ -35,35 +40,40 @@ const bidSchema = new Schema(
 
     bidDate: { type: Date, default: Date.now },
   },
-  { _id: false,timestamps: true }
+  { _id: false, timestamps: true }
 );
 
-
-const milestoneSchema = new Schema({
-  description: { type: String, required: true },
-  amount: { type: Number, required: true },
-  dueDate: { type: Date, required: true },
-  status: {
-    type: String,
-    enum: Object.values(PAYMENT_STATUS_ENUM),
-    default: PAYMENT_STATUS_ENUM.PENDING,
+const milestoneSchema = new Schema(
+  {
+    description: { type: String, required: true },
+    amount: { type: Number, required: true },
+    dueDate: { type: Date, required: true },
+    status: {
+      type: String,
+      enum: Object.values(PAYMENT_STATUS_ENUM),
+      default: PAYMENT_STATUS_ENUM.PENDING,
+    },
   },
-},{
-  timestamps: true
-});
+  {
+    timestamps: true,
+  }
+);
 
-const paymentSchema = new Schema({
-  freelancerEmail: { type: String, required: true },
-  amount: { type: Number, required: true },
-  status: {
-    type: String,
-    enum: Object.values(PAYMENT_STATUS_ENUM),
-    default: PAYMENT_STATUS_ENUM.PENDING,
+const paymentSchema = new Schema(
+  {
+    freelancerEmail: { type: String, required: true },
+    amount: { type: Number, required: true },
+    status: {
+      type: String,
+      enum: Object.values(PAYMENT_STATUS_ENUM),
+      default: PAYMENT_STATUS_ENUM.PENDING,
+    },
+    paymentDate: { type: Date, default: null },
   },
-  paymentDate: { type: Date, default: null },
-},{
-  timestamps: true
-});
+  {
+    timestamps: true,
+  }
+);
 
 const projectSchema = new Schema(
   {
@@ -80,13 +90,18 @@ const projectSchema = new Schema(
       enum: Object.values(PROJECT_STATUS_ENUM),
       default: PROJECT_STATUS_ENUM.OPEN,
     },
+    projectType: {
+      type: String,
+      enum: Object.values(PROJECT_TYPE_ENUM),
+      required: true,
+    },
     bids: { type: [bidSchema], default: [] },
     assignedFreelancerEmail: { type: String, default: null },
     milestones: { type: [milestoneSchema], default: [] },
     payments: { type: [paymentSchema], default: [] },
     totalPaid: { type: Number, default: 0 },
   },
-  { versionKey: false ,timestamps: true}
+  { versionKey: false, timestamps: true }
 );
 
 const transactionSchema = new Schema(
@@ -111,7 +126,7 @@ const transactionSchema = new Schema(
     projectId: { type: String, default: null },
     freelancerId: { type: String, default: null },
   },
-  { _id: false,timestamps: true }
+  { _id: false, timestamps: true }
 );
 
 const bankDetailsSchema = new Schema(
@@ -123,7 +138,7 @@ const bankDetailsSchema = new Schema(
     ifscCode: { type: String, default: null },
     linkedEmail: { type: String, required: true },
   },
-  { _id: false ,timestamps: true}
+  { _id: false, timestamps: true }
 );
 
 const userSchema = new Schema(
@@ -150,7 +165,7 @@ const userSchema = new Schema(
     transactions: { type: [transactionSchema], default: [] },
     bankDetails: { type: bankDetailsSchema, default: null },
   },
-  { versionKey: false,timestamps: true }
+  { versionKey: false, timestamps: true }
 );
 
 const clientModel = models.clients || mongoose.model("clients", userSchema);

@@ -1,7 +1,6 @@
 "use server";
 
 import { exceptionEnums } from "@/app/enums/responseEnums";
-import { approveBidImpl } from "@/app/impl/approveBidImpl";
 import { milestoneImpl } from "@/app/impl/milestoneImpl";
 import { NextResponse } from "next/server";
 
@@ -9,13 +8,7 @@ export async function POST(req: Request) {
   try {
     const request = await req.json();
 
-    if (
-      !request.authToken ||
-      !request.id ||
-      !request?.amount ||
-      !request?.description ||
-      !request?.date
-    ) {
+    if (!request.authToken || !request.id) {
       return NextResponse.json(
         { message: exceptionEnums.BAD_REQUEST },
         { status: 400 }

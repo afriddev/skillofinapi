@@ -15,7 +15,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const { message, status ,data} = await milestoneImpl(request);
+    const { message, status } = await milestoneImpl(request);
 
     const response = NextResponse.json({ message }, { status });
 

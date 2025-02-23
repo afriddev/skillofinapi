@@ -14,7 +14,7 @@ export function getTodayDate(): string {
   const hours = today.getHours();
   const minutes = today.getMinutes();
   const seconds = today.getSeconds();
-  return `${day} ${month} ${year} ${hours}:${minutes}:${seconds}`;
+  return `${day}/${month}/${year} - ${hours}:${minutes}:${seconds}`;
 }
 export function getTodayDay(): number {
   const today = new Date();

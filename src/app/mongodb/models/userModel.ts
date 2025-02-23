@@ -30,6 +30,7 @@ const postSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
+
 const userSchema = new Schema(
   {
     authToken: { type: String, required: false, default: "" },

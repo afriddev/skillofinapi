@@ -4,7 +4,6 @@ import { exceptionEnums } from "@/app/enums/responseEnums";
 import { handleLoginIMPL } from "@/app/impl/loginImpl";
 import { userLoginPayloadType } from "@/app/types/userType";
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
 
 export async function POST(req: Request) {
 

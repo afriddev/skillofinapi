@@ -15,9 +15,9 @@ export async function POST(req: Request) {
       );
     }
 
-    const { message, status } = await approveBidImpl(request);
+    const { message, status,data } = await approveBidImpl(request);
 
-    const response = NextResponse.json({ message }, { status });
+    const response = NextResponse.json({ message,data }, { status });
 
     return response;
   } catch (error) {

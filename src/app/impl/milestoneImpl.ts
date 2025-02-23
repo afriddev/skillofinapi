@@ -19,6 +19,7 @@ export async function milestoneImpl(user: {
 }): Promise<{
   status: number;
   message: any;
+  data?:any
 }> {
   await connectDB("users");
   const emailId = decodeString(user?.authToken);
@@ -71,7 +72,7 @@ export async function milestoneImpl(user: {
       }),
     });
 
-    return { status: 200, message: responseEnums?.SUCCESS };
+    return { status: 200, message: responseEnums?.SUCCESS,data:notificationMessage?.trim() };
   }
 
   const userData = await userModel.findOne({ emailId });
@@ -135,5 +136,5 @@ export async function milestoneImpl(user: {
     }),
   });
 
-  return { status: 200, message: responseEnums?.SUCCESS };
+  return { status: 200, message: responseEnums?.SUCCESS,data:notificationMessage.trim() };
 }

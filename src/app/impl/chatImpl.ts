@@ -53,6 +53,10 @@ export async function chatImpl(user: {
   let projetData = {};
   if (user?.project) {
     projetData = (await projectModel.findOne({ id: user?.project })) ?? {};
+  } else if (senderData?.messages[user.receiver.replace(/\./g, "_")]?.project) {
+    projetData = (await projectModel.findOne({
+      id: senderData?.messages[user.receiver.replace(/\./g, "_")]?.project?.id,
+    })) as any;
   }
 
   const path = `messages.${user.receiver.replace(/\./g, "_")}.messages`;
@@ -147,8 +151,8 @@ export async function chatImpl(user: {
     {
       $push: {
         notifications: {
-          $each: [notification], // Add new notification
-          $position: 0, // Insert at the beginning (top)
+          $each: [notification],
+          $position: 0,
         },
       },
     },

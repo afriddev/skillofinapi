@@ -15,6 +15,7 @@ export async function approveBidImpl(user: {
 }): Promise<{
   status: number;
   message: any;
+  data?: any;
 }> {
   await connectDB("users");
 
@@ -76,7 +77,7 @@ export async function approveBidImpl(user: {
   </div>
 `;
 
-  const BASE_URL = "https://skillofinapi.vercel.app/api" 
+  const BASE_URL = "https://skillofinapi.vercel.app/api";
   // const BASE_URL = "http://localhost:3000/api";
 
   await fetch(BASE_URL + "/chat", {
@@ -92,6 +93,9 @@ export async function approveBidImpl(user: {
     }),
   });
 
-
-  return { status: 200, message: responseEnums?.SUCCESS };
+  return {
+    status: 200,
+    message: responseEnums?.SUCCESS,
+    data: notificationMessage.trim(),
+  };
 }

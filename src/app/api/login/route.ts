@@ -3,10 +3,10 @@
 import { exceptionEnums } from "@/app/enums/responseEnums";
 import { handleLoginIMPL } from "@/app/impl/loginImpl";
 import { userLoginPayloadType } from "@/app/types/userType";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-
   try {
     const request: userLoginPayloadType = await req.json();
 
@@ -19,9 +19,9 @@ export async function POST(req: Request) {
 
     const { message, status, authToken } = await handleLoginIMPL(request);
 
-
     const response = NextResponse.json({ message, authToken }, { status });
-    response.cookies.set("authToke","okiadsadsadadsadaa")
+
+    response.cookies.set("authToke", "okiadsadsadadsadaa");
 
     return response;
   } catch (error) {

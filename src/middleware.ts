@@ -4,12 +4,10 @@ import type { NextRequest } from "next/server";
 export function middleware(req: NextRequest) {
   const res = NextResponse.next();
 
-  // ✅ Get the request origin dynamically
   const origin = req.headers.get("origin") || "";
 
-  // ✅ Allow all origins dynamically (but required for credentials)
   if (origin) {
-    console.log(origin)
+    console.log(origin);
     res.headers.set("Access-Control-Allow-Origin", origin);
   }
 
@@ -23,15 +21,17 @@ export function middleware(req: NextRequest) {
     "Content-Type, Authorization"
   );
 
-  // ✅ Handle OPTIONS request (CORS preflight)
-  if (req.method === "OPTIONS") {
-    return new NextResponse(null, { status: 204 });
-  }
+  const protectedRoutes = ["/api/protected", "/api/dashboard"];
+  const authToken = req.cookies.get("authToken")?.value;
 
+  if (protectedRoutes.some((path) => req.nextUrl.pathname.startsWith(path))) {
+    if (!authToken) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+  }
   return res;
 }
 
-// ✅ Apply middleware to all API routes
 export const config = {
   matcher: "/api/:path*",
 };

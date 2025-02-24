@@ -9,7 +9,7 @@ export async function POST(req: Request) {
     const { fullName, emailId, phone } = await req?.json();
 
     if (fullName && emailId ) {
-      await connectDB("contactedUsers");
+      await connectDB("users");
       const alreadyContactedUser = await contactedUsersModel.findOne({
         emailId,
       });

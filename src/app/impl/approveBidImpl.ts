@@ -6,6 +6,7 @@ import clientModel from "../mongodb/models/clientModel";
 import projectModel from "../mongodb/models/projectModel";
 import userModel from "../mongodb/models/userModel";
 import { BID_STATUS_ENUM, PROJECT_STATUS_ENUM } from "../types/projectTypes";
+import { BASE_URL } from "../utils/appUtils";
 import { decodeString } from "../utils/auth/authHandlers";
 
 export async function approveBidImpl(user: {
@@ -77,10 +78,8 @@ export async function approveBidImpl(user: {
   </div>
 `;
 
-  const BASE_URL = "https://skillofinapi.vercel.app/api";
-  // const BASE_URL = "http://localhost:3000/api";
 
-  await fetch(BASE_URL + "/chat", {
+  const a = await fetch(BASE_URL + "/chat", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

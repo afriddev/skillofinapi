@@ -56,12 +56,13 @@ export async function postJobImpl(user: {
   }
 
   userPostedProjects.unshift(projectData);
+  console.log(emailId)
 
   await clientModel.updateOne(
     { emailId },
     {
-      $set: {
-        postedProjects: userPostedProjects,
+      $push: {
+        postedProjects: projectData,
       },
     }
   );

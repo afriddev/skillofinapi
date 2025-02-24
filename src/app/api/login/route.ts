@@ -4,7 +4,7 @@ import { exceptionEnums, userEnums } from "@/app/enums/responseEnums";
 import { handleLoginIMPL } from "@/app/impl/loginImpl";
 import { userLoginPayloadType } from "@/app/types/userType";
 import { getTodayDate } from "@/app/utils/appUtils";
-import {  encodeString } from "@/app/utils/auth/authHandlers";
+import { encodeString } from "@/app/utils/auth/authHandlers";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -43,6 +43,11 @@ export async function POST(req: Request) {
     });
 
     const response = NextResponse.json({ message, emailId }, { status });
+    if (message === "SUCCESS") {
+      response.cookies.set("refreshToken", refreshToken);
+      response.cookies.set("browserToken", browserToken);
+      response.cookies.set("authToken", authToken);
+    }
 
     return response;
   } catch (error) {

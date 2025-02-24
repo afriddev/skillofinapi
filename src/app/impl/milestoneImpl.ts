@@ -6,6 +6,7 @@ import clientModel from "../mongodb/models/clientModel";
 import projectModel from "../mongodb/models/projectModel";
 import userModel from "../mongodb/models/userModel";
 import { PAYMENT_STATUS_ENUM } from "../types/projectTypes";
+import { BASE_URL } from "../utils/appUtils";
 import { decodeString } from "../utils/auth/authHandlers";
 
 export async function milestoneImpl(user: {
@@ -23,7 +24,6 @@ export async function milestoneImpl(user: {
 }> {
   await connectDB("users");
   const emailId = decodeString(user?.emailId);
-  const BASE_URL = "https://skillofinapi.vercel.app/api";
 
   if (user.method === "delete") {
     const projectData = await projectModel.findOneAndUpdate(

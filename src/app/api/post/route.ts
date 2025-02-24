@@ -11,14 +11,14 @@ export async function POST(req: Request) {
   try {
     const request = await req.json();
 
-    if (!request.authToken) {
+    if (!request.emailId) {
       return NextResponse.json(
         { message: exceptionEnums.BAD_REQUEST },
         { status: 400 }
       );
     }
 
-    const emailId = decodeString(request?.authToken);
+    const emailId = decodeString(request?.emailId);
 
     try {
       await connectDB("users");

@@ -12,16 +12,16 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { authToken } = await req.json();
+    const { emailId:email } = await req.json();
 
-    if (!authToken) {
+    if (!email) {
       return NextResponse.json(
         { message: exceptionEnums.BAD_REQUEST },
         { status: 400 }
       );
     }
 
-    const emailId = decodeString(authToken);
+    const emailId = decodeString(email);
     await connectDB("users");
     const user = await userModel.findOne({ emailId });
 

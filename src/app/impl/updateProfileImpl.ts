@@ -10,7 +10,7 @@ import userModel from "../mongodb/models/userModel";
 import { decodeString } from "../utils/auth/authHandlers";
 
 export async function updateProfileImpl(user: {
-  authToken: string;
+  emailId: string;
   method: string;
   data: any;
 }): Promise<{
@@ -19,7 +19,7 @@ export async function updateProfileImpl(user: {
   data?: any;
 }> {
   await connectDB("users");
-  const emailId = decodeString(user?.authToken);
+  const emailId = decodeString(user?.emailId);
   const userData = await userModel.findOne({ emailId });
   if (!userData) {
     return { status: 200, message: userEnums.USER_NOT_FOUND };

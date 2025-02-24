@@ -9,7 +9,7 @@ export async function POST(req: Request) {
     const request = await req.json();
 
     if (
-      !request.authToken ||
+      !request.eamilId ||
       !request.bidAmount ||
       !request?.bidDescription ||
       !request?.projectId

@@ -11,7 +11,7 @@ import { decodeString } from "../utils/auth/authHandlers";
 import { getAUthToken } from "../utils/auth/cookieHandlers";
 
 export async function postJobImpl(user: {
-  authToken: string;
+  emailId: string;
   title: string;
   description: string;
   costPerHour: string;
@@ -21,12 +21,12 @@ export async function postJobImpl(user: {
 }): Promise<{
   status: number;
   message: any;
-  authToken?: string;
+  emailId?: string;
   ca?: boolean;
 }> {
   await connectDB("users");
 
-  const emailId = decodeString(user?.authToken);
+  const emailId = decodeString(user?.emailId);
 
   const userData = await userModel.findOne({ emailId });
 

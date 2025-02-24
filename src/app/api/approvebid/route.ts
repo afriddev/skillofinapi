@@ -8,7 +8,7 @@ export async function POST(req: Request) {
   try {
     const request = await req.json();
 
-    if (!request.authToken || !request.id || !request?.freelancerEmailId) {
+    if (!request.emailId || !request.id || !request?.freelancerEmailId) {
       return NextResponse.json(
         { message: exceptionEnums.BAD_REQUEST },
         { status: 400 }

@@ -9,6 +9,7 @@ import {
 export enum userRole {
   CLIENT = "CLIENT",
   FREELANCER = "FREELANCER",
+  BANK = "BANK"
 }
 
 export enum TRANSACTION_STATUS_ENUM {

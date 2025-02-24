@@ -10,13 +10,10 @@ import userModel from "../mongodb/models/userModel";
 import { decodeString } from "../utils/auth/authHandlers";
 
 export async function getMeIMPL(user: {
-  authToken: string;
   emailId: string;
 }): Promise<{ status: number; message: any; data?: any }> {
   await connectDB("users");
-  let emailId;
-  if (user?.authToken && !user?.emailId) emailId = decodeString(user.authToken);
-  else emailId = user?.emailId;
+  const emailId = decodeString(user.emailId);
 
   const userData = await userModel.findOne({ emailId: emailId });
 

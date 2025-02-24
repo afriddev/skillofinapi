@@ -1,5 +1,5 @@
 import mongoose, { models, Schema } from "mongoose";
-import { userRole } from "./userModel";
+import { userRole } from "./clientModel";
 
 export enum LANGUAGE_ENUM {
   BASIC = "BASIC",

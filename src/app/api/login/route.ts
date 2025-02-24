@@ -1,11 +1,26 @@
 "use server";
 
-import { exceptionEnums } from "@/app/enums/responseEnums";
+import { exceptionEnums, userEnums } from "@/app/enums/responseEnums";
 import { handleLoginIMPL } from "@/app/impl/loginImpl";
 import { userLoginPayloadType } from "@/app/types/userType";
+import { getTodayDate } from "@/app/utils/appUtils";
+import {  encodeString } from "@/app/utils/auth/authHandlers";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
+  const userAgent = req.headers.get("user-agent") || null;
+
+  if (!userAgent) {
+    return NextResponse.json(
+      {
+        message: userEnums?.UNAUTHORISED,
+      },
+      {
+        status: 401,
+      }
+    );
+  }
+
   try {
     const request: userLoginPayloadType = await req.json();
 
@@ -16,12 +31,22 @@ export async function POST(req: Request) {
       );
     }
 
-    const { message, status, authToken } = await handleLoginIMPL(request);
+    const authToken = encodeString(request?.emailId);
+    const browserToken = encodeString(userAgent);
+    const refreshToken = encodeString(getTodayDate());
 
-    const response = NextResponse.json({ message, authToken }, { status });
+    const { message, status, emailId } = await handleLoginIMPL({
+      ...request,
+      browserToken,
+      authToken,
+      refreshToken,
+    });
+
+    const response = NextResponse.json({ message, emailId }, { status });
 
     return response;
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       { message: exceptionEnums.SERVER_ERROR },
       { status: 500 }

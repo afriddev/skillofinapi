@@ -9,7 +9,7 @@ import { BID_STATUS_ENUM, PROJECT_STATUS_ENUM } from "../types/projectTypes";
 import { decodeString } from "../utils/auth/authHandlers";
 
 export async function approveBidImpl(user: {
-  authToken: string;
+  emailId: string;
   id: string;
   freelancerEmailId: string;
 }): Promise<{
@@ -19,7 +19,7 @@ export async function approveBidImpl(user: {
 }> {
   await connectDB("users");
 
-  const emailId = decodeString(user?.authToken);
+  const emailId = decodeString(user?.emailId);
   const userData = await userModel.findOne({ emailId });
   if (!userData) {
     return { status: 200, message: userEnums.USER_NOT_FOUND };
@@ -88,7 +88,7 @@ export async function approveBidImpl(user: {
     body: JSON.stringify({
       message: notificationMessage.trim(),
       receiver: user?.freelancerEmailId,
-      authToken: user?.authToken,
+      emailId: user?.emailId,
       project: projectData?.id,
     }),
   });

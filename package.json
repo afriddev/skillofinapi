@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "bcrypt": "^5.1.1",
     "moment-timezone": "^0.5.47",
     "mongoose": "^8.8.0",
     "next": "15.0.2",

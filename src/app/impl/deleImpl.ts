@@ -6,7 +6,7 @@ import postModel from "../mongodb/models/postModel";
 import userModel from "../mongodb/models/userModel";
 
 interface DeleteRequest {
-  authToken: string;
+  emailId: string;
   method: string;
   id: string;
 }
@@ -14,7 +14,7 @@ interface DeleteRequest {
 export async function deleteImpl(
   request: DeleteRequest
 ): Promise<{ status: number; message: any }> {
-  const emailId = decodeString(request?.authToken);
+  const emailId = decodeString(request?.emailId);
   try {
     if (request.method === "job") {
       await projectModel.findOneAndDelete({id:request?.id});

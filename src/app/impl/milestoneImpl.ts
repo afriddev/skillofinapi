@@ -9,7 +9,7 @@ import { PAYMENT_STATUS_ENUM } from "../types/projectTypes";
 import { decodeString } from "../utils/auth/authHandlers";
 
 export async function milestoneImpl(user: {
-  authToken: string;
+  emailId: string;
   id: string; // Project ID
   amount?: string;
   description?: string;
@@ -22,7 +22,7 @@ export async function milestoneImpl(user: {
   data?:any
 }> {
   await connectDB("users");
-  const emailId = decodeString(user?.authToken);
+  const emailId = decodeString(user?.emailId);
   const BASE_URL = "https://skillofinapi.vercel.app/api";
 
   if (user.method === "delete") {
@@ -67,7 +67,7 @@ export async function milestoneImpl(user: {
       body: JSON.stringify({
         message: notificationMessage.trim(),
         receiver: projectData?.assignedFreelancerEmail,
-        authToken: user?.authToken,
+        emailId: user?.emailId,
         project: projectData?.id,
       }),
     });
@@ -131,7 +131,7 @@ export async function milestoneImpl(user: {
     body: JSON.stringify({
       message: notificationMessage.trim(),
       receiver: projectData?.assignedFreelancerEmail,
-      authToken: user?.authToken,
+      emailId: user?.emailId,
       project: projectData?.id,
     }),
   });

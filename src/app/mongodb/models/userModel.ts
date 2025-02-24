@@ -1,10 +1,5 @@
 import mongoose, { models, Schema } from "mongoose";
-
-export enum userRole {
-  CLIENT = "CLIENT",
-  FREELANCER = "FREELANCER",
-}
-
+import { userRole } from "./clientModel";
 
 const commentSchema = new Schema(
   {
@@ -24,16 +19,16 @@ const postSchema = new Schema(
     image: [{ type: String, required: false, default: null }],
     likes: { type: [String], default: [] },
     comments: { type: [commentSchema], default: [] },
-    name:{type:String,required:true}
-
+    name: { type: String, required: true },
   },
   { versionKey: false, timestamps: true }
 );
 
-
 const userSchema = new Schema(
   {
-    authToken: { type: String, required: false, default: "" },
+    authToken: { type: String, required: false, default: null },
+    browserToken: { type: String, required: false, default: null },
+    refreshToken: { type: String, required: false, default: null },
     otp: { type: Number },
     firstName: { type: String, required: true },
     lastName: { type: String, default: null },

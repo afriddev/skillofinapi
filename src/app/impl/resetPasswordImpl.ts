@@ -14,7 +14,7 @@ export async function resetPasswordImpl(
     passwordOne:string,
     passwordTwo:string
   }
-): Promise<{ status: number; message: any; authToken?: string; ca?: boolean }> {
+): Promise<{ status: number; message: any; emailId?: string; ca?: boolean }> {
   await connectDB("users");
 
   const userData = await userModel.findOne({ emailId: user.emailId });
@@ -25,16 +25,16 @@ export async function resetPasswordImpl(
 
   if (user.otp && !user?.passwordOne) {
     if (userData.otp?.toString() === user.otp.toString()) {
-      const authToken = encodeString(user.emailId);
+      const emailId = encodeString(user.emailId);
       await userModel.updateOne(
         { emailId: user.emailId },
-        { $set: { loggedIn: true, authToken, } }
+        { $set: { loggedIn: true, authToken:emailId, } }
       );
 
       return {
         status: 200,
         message: responseEnums.SUCCESS,
-        authToken,
+        emailId,
       };
     } else {
       return { status: 200, message: userEnums.INVALID_OTP };

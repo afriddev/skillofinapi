@@ -16,6 +16,9 @@ export type userLoginPayloadType = {
   emailId: string;
   password: string;
   otp?: string;
+  authToken?:string;
+  browserToken?:string;
+  refreshToken?:string
 };
 
 export type configureAmountsPayloadType = {

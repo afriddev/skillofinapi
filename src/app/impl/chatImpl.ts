@@ -9,14 +9,14 @@ import { getTodayDate } from "../utils/appUtils";
 import { decodeString } from "../utils/auth/authHandlers";
 
 export async function chatImpl(user: {
-  authToken: string;
+  emailId: string;
   receiver: string;
   message: string;
   project?: any;
 }): Promise<{ status: number; message: any; data?: any }> {
   await connectDB("users");
 
-  const emailId = decodeString(user.authToken);
+  const emailId = decodeString(user.emailId);
   const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/;
   const phoneRegex = /\b\d{10,}\b/;
 

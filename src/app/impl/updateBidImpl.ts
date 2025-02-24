@@ -9,7 +9,7 @@ import { BID_STATUS_ENUM } from "../types/projectTypes";
 import { decodeString } from "../utils/auth/authHandlers";
 
 export async function updateBidImpl(user: {
-  authToken: string;
+  emailId: string;
   bidAmount: string;
   bidDescription: string;
   projectId: string;
@@ -20,7 +20,7 @@ export async function updateBidImpl(user: {
   try {
     await connectDB("users");
 
-    const emailId = decodeString(user?.authToken);
+    const emailId = decodeString(user?.emailId);
     if (!emailId) return { status: 401, message: userEnums?.USER_NOT_FOUND };
 
     const userData = await userModel.findOne({ emailId });

@@ -9,7 +9,7 @@ import userModel from "../mongodb/models/userModel";
 import { sendOtp } from "../services/apiServices";
 import { userSignUpPayloadType } from "../types/userType";
 import { getOTP } from "../utils/appUtils";
-import { encodeString } from "../utils/auth/authHandlers";
+import { encodeString, hashString } from "../utils/auth/authHandlers";
 import { getAUthToken } from "../utils/auth/cookieHandlers";
 import moment from "moment-timezone";
 
@@ -68,10 +68,12 @@ async function handleSignUpIMPL(
       firstName: user?.firstName,
       lastName: user?.lastName ?? "",
       authToken: getAUthToken(),
-      password: encodeString(user?.password),
+      password: await hashString(user?.password),
       role:
-        user?.role.toLowerCase() === "client"
+        user?.role?.toLowerCase() === "client"
           ? userRole.CLIENT
+          : user?.role?.toLowerCase() === "client"
+          ? userRole?.BANK
           : userRole.FREELANCER,
 
       countryCode: user?.countryCode,

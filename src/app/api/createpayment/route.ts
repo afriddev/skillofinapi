@@ -2,17 +2,17 @@
 
 import { exceptionEnums, responseEnums } from "@/app/enums/responseEnums";
 import { NextResponse } from "next/server";
-// import Stripe from "stripe";
+import Stripe from "stripe";
 
-// const stripe = new Stripe("" as string, {
-//   apiVersion: "2025-01-27.acacia",
-// });
+const stripe = new Stripe("" as string, {
+  apiVersion: "2025-01-27.acacia",
+});
 
 export async function POST(req: Request) {
   try {
     const request = await req.json();
 
-    if (!request.authToken || !request.amount) {
+    if (!request.emailId || !request.amount) {
       return NextResponse.json(
         { message: exceptionEnums.BAD_REQUEST },
         { status: 400 }
@@ -20,10 +20,10 @@ export async function POST(req: Request) {
     }
 
     try {
-      // const paymentIntent = await stripe.paymentIntents.create({
-      //   amount: parseInt(request?.amount) * 100,
-      //   currency: "usd",
-      // });
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: parseInt(request?.amount) * 100,
+        currency: "usd",
+      });
 
       return NextResponse.json(
         {

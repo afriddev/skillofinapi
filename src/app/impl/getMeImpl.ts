@@ -2,6 +2,7 @@
 
 import { responseEnums, userEnums } from "../enums/responseEnums";
 import connectDB from "../mongodb/connectors/connectDB";
+import bankModel from "../mongodb/models/bankModel";
 import clientModel, { userRole } from "../mongodb/models/clientModel";
 import freelancerModel from "../mongodb/models/freelancerModel";
 import notificationsModel from "../mongodb/models/notificationMode";
@@ -25,7 +26,11 @@ export async function getMeIMPL(user: {
     };
   }
   const userAccountModel =
-    userData.role === userRole.FREELANCER ? freelancerModel : clientModel;
+    userData.role === userRole.FREELANCER
+      ? freelancerModel
+      : userData.role === userRole.BANK
+      ? bankModel
+      : clientModel;
 
   const userAccountData = await userAccountModel.findOne({ emailId });
 

@@ -61,7 +61,18 @@ export async function updateProfileImpl(user: {
               },
             }
           );
+        } else if (userData?.role === "BANK") {
+          await userAccountModel.updateOne(
+            { emailId },
+            {
+              $set: {
+                bankName: user?.data?.headline,
+                description: user?.data?.summary,
+              },
+            }
+          );
         }
+
         await userAccountModel.updateOne(
           { emailId },
           {

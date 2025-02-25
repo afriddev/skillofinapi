@@ -2,6 +2,7 @@
 
 import { responseEnums, userEnums } from "../enums/responseEnums";
 import connectDB from "../mongodb/connectors/connectDB";
+import bankModel from "../mongodb/models/bankModel";
 import clientModel, { userRole } from "../mongodb/models/clientModel";
 import freelancerModel from "../mongodb/models/freelancerModel";
 import tempUsersModel from "../mongodb/models/tempUsersModel";
@@ -56,7 +57,11 @@ async function handleSignUpIMPL(
   }
 
   const roleCollection =
-    user?.role?.toLowerCase() === "freelancer" ? freelancerModel : clientModel;
+    user?.role?.toLowerCase() === "freelancer"
+      ? freelancerModel
+      : user?.role?.toLowerCase() === "bank"
+      ? bankModel
+      : clientModel;
 
   try {
     const timeZone = await getTimeZone(user?.countryCode);
@@ -72,7 +77,7 @@ async function handleSignUpIMPL(
       role:
         user?.role?.toLowerCase() === "client"
           ? userRole.CLIENT
-          : user?.role?.toLowerCase() === "client"
+          : user?.role?.toLowerCase() === "bank"
           ? userRole?.BANK
           : userRole.FREELANCER,
 

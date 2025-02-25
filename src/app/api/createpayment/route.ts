@@ -3,7 +3,6 @@
 import { exceptionEnums, responseEnums } from "@/app/enums/responseEnums";
 import connectDB from "@/app/mongodb/connectors/connectDB";
 import paymentSecretsModel from "@/app/mongodb/models/paymentSecretModel";
-import paymentSecrets from "@/app/mongodb/models/paymentSecretModel";
 import { decodeString } from "@/app/utils/auth/authHandlers";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";

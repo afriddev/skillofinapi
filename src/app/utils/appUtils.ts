@@ -28,6 +28,6 @@ export function getTotalDaysInMonth(): number {
   return new Date(year, month + 1, 0).getDate();
 }
 
-// export const BASE_URL = "https://skillofinapi.vercel.app/api";
-export const BASE_URL = "http://localhost:3000/api";
+export const BASE_URL = "https://skillofinapi.vercel.app/api";
+// export const BASE_URL = "http://localhost:3000/api";
 

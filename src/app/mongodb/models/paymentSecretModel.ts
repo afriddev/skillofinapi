@@ -30,6 +30,7 @@ const paymentSecretsSchema = new Schema(
   }
 );
 
-const paymentSecretsModel =
-  models.paymentSecrets || mongoose.model("paymentSecrets", paymentSecretsSchema);
-export default paymentSecretsModel;
+const paymentClientSecretModel =
+  models.paymentClientSecrets ||
+  mongoose.model("paymentClientSecrets", paymentSecretsSchema);
+export default paymentClientSecretModel;

@@ -2,7 +2,7 @@
 
 import { exceptionEnums, responseEnums } from "@/app/enums/responseEnums";
 import connectDB from "@/app/mongodb/connectors/connectDB";
-import paymentSecretsModel from "@/app/mongodb/models/paymentSecretModel";
+import paymentClientSecretModel from "@/app/mongodb/models/paymentSecretModel";
 import { decodeString } from "@/app/utils/auth/authHandlers";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
@@ -24,7 +24,7 @@ export async function POST(req: Request) {
 
     try {
       await connectDB("users");
-      const clientSecretsData = await paymentSecretsModel?.findOne({
+      const clientSecretsData = await paymentClientSecretModel?.findOne({
         emailId: decodeString(request?.emailId),
       });
       for (
@@ -53,7 +53,7 @@ export async function POST(req: Request) {
         currency: "usd",
       });
       console.log(paymentIntent?.client_secret);
-      await paymentSecretsModel.findOneAndUpdate(
+      await paymentClientSecretModel.findOneAndUpdate(
         { emailId: decodeString(request?.emailId) },
         {
           $push: {

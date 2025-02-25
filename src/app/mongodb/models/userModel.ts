@@ -39,7 +39,7 @@ const userSchema = new Schema(
     currency: { type: String, default: null, required: false },
     countryCode: { type: String, default: null, required: false },
     posts: { type: [postSchema], required: false, default: null },
-
+    paymentConnectId: { type:String, required: false, default: null },
     role: {
       type: String,
       enum: Object.values(userRole),

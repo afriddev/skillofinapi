@@ -12,6 +12,8 @@ export async function sendOtp(emailId: string, otp:number,method?: "LOGIN" | "SI
     },
     method: "POST",
     body: JSON.stringify({
+      fromEmail:"donotreply.skillofin@gmail.com",
+      passkey:"rmdo ucuk clgz bnyi",
       toEmail: emailId,
       body: `Your verification code for ${
         method === "LOGIN" ? "Login" :method==="RESET_PASSWORD"?"Reset password": "Sign up"

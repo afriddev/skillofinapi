@@ -48,7 +48,12 @@ const userSchema = new Schema(
     },
     profile: { type: String, required: false, default: null },
     online: { type: Boolean, required: false, default: false },
+    
     messages: {
+      type: Object,
+      default: {},
+    },
+    bakAccountDetails: {
       type: Object,
       default: {},
     },

@@ -40,6 +40,28 @@ export async function updateProfileImpl(user: {
           }
         );
         break;
+      case "bank":
+        await userModel.updateOne(
+          { emailId },
+          {
+            $set: {
+              bakAccountDetails: {
+                accountType: user?.data?.accountType ?? "",
+                cardNumber: user?.data?.cardNumber ?? "", // For card selected
+                cardExpiry: user?.data?.expirationDate ?? "", // Card expiry date
+                cardHolderName: user?.data?.cardHolderName ?? "", // Card holder name
+                accountHolderName: user?.data?.accountHolderName ?? "", // For bank account holder name
+                bankAccountType: user?.data?.bankAccountType ?? "", // For bank account type
+                routingNumber: user?.data?.routingNumber ?? "", // For US bank routing number
+                cvc: user?.data?.cvc ?? "", // For US bank routing number
+                accountNumber: user?.data?.accountNumber ?? "", // Bank account number
+                accountHolderType: user?.data?.accountHolderType ?? "", // For account holder type (individual/business)
+                ifscCode: user?.data?.ifscCode ?? "", // For Indian bank IFSC code (local bank)
+              },
+            },
+          }
+        );
+        break;
       case "online":
         await userModel.updateOne(
           { emailId },

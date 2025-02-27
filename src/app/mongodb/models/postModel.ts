@@ -6,6 +6,8 @@ const commentSchema = new Schema(
     name: { type: String, required: true },
     commentText: { type: String, required: true },
     profile: { type: String, required: false },
+    emailId:{type:String,required:true}
+
   },
   { _id: false, timestamps: true }
 );

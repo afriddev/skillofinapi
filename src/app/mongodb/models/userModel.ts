@@ -3,12 +3,12 @@ import { userRole } from "./clientModel";
 
 const commentSchema = new Schema(
   {
-    emailId: { type: String, required: true },
+    name: { type: String, required: true },
     commentText: { type: String, required: true },
+    profile: { type: String, required: false },
   },
   { _id: false, timestamps: true }
 );
-
 const postSchema = new Schema(
   {
     emailId: { type: String, required: true },

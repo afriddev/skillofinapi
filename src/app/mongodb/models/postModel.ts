@@ -1,9 +1,11 @@
 import mongoose, { models, Schema } from "mongoose";
+import { flightRouterStateSchema } from "next/dist/server/app-render/types";
 
 const commentSchema = new Schema(
   {
-    emailId: { type: String, required: true },
+    name: { type: String, required: true },
     commentText: { type: String, required: true },
+    profile: { type: String, required: false },
   },
   { _id: false, timestamps: true }
 );
@@ -22,7 +24,7 @@ const postSchema = new Schema(
     },
     likes: { type: [String], default: [] },
     comments: { type: [commentSchema], default: [] },
-    name:{type:String,required:true}
+    name: { type: String, required: true },
   },
   { versionKey: false, timestamps: true }
 );

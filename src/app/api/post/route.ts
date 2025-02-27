@@ -8,126 +8,134 @@ import { getAUthToken } from "@/app/utils/auth/cookieHandlers";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
+  ahdashdashdaskhdkla
+  asdkashldsakd
+  dasldjlka
   try {
     const request = await req.json();
-
     if (!request.emailId) {
       return NextResponse.json(
         { message: exceptionEnums.BAD_REQUEST },
         { status: 400 }
       );
-    }                                                                               
+    }
+    const emailId = decodeString(request.emailId);
+    await connectDB("users");
+    const userData = await userModel.findOne({ emailId });
+    const userProfile = userData?.profile || "";
 
-    const emailId = decodeString(request?.emailId);
-
-    try {
-      await connectDB("users");
-
-      const userData = await userModel?.findOne({ emailId });
-      const userProfile = userData?.profile || "";
-
-      if (request?.edit) {
-        try {
-          const postData = await postModel?.findOne({
-            emailId,
-            id: request?.id,
-          });
-          await postModel?.updateOne(
-            {
-              emailId,
-              id: request?.id,
-            },
-            {
-              $set: {
-                title: request?.title,
-                content: request?.content,
-                image: request?.image ? request?.image : postData?.image,
-              },
-            }
-          );
-
-          const myPosts = userData?.posts ?? [];
-
-          for (const post of myPosts) {
-            post.profile = userProfile;
-            if (post.id === request?.id) {
-              post.title = request?.title;
-              post.content = request?.content;
-              post.image = request?.image ? request?.image : post?.image;
-            }
-          }
-
-          await userModel?.updateOne({ emailId }, { $set: { posts: myPosts } });
-
-          await postModel.updateMany(
-            { emailId },
-            { $set: { profile: userProfile } }
-          );
-
-          const posts = await postModel.find().sort({ createdAt: -1 });
-
-          return NextResponse.json(
-            {
-              message: responseEnums?.SUCCESS,
-              posts,
-            },
-            { status: 200 }
-          );
-        } catch (e) {
-          return NextResponse.json(
-            {
-              message: responseEnums?.SUCCESS,
-            },
-            {
-              status: 400,
-            }
-          );
-        }
+    // Handle Editing a Post
+    if (request.edit) {
+      const postData = await postModel.findOne({ emailId, id: request.id });
+      if (!postData) {
+        return NextResponse.json(
+          { message: "Post not found" },
+          { status: 404 }
+        );
       }
+      await postModel.updateOne(
+        { emailId, id: request.id },
+        {
+          $set: {
+            title: request.title,
+            content: request.content,
+            image: request.image ? request.image : postData.image,
+          },
+        }
+      );
+      userData.posts = userData.posts.map((post: any) =>
+        post.id === request.id ? { ...post, ...request } : post
+      );
+      await userModel.updateOne(
+        { emailId },
+        { $set: { posts: userData.posts } }
+      );
+    }
 
+    // Handle Creating a Post
+    else if (request.create) {
       const postData = await postModel.create({
         emailId,
-        title: request?.title,
-        content: request?.content,
+        title: request.title,
+        content: request.content,
         profile: userProfile,
         id: getAUthToken(20),
-        image: request?.image ?? null,
+        image: request.image ?? null,
         name:
           userData?.firstName +
           (userData?.lastName ? " " + userData?.lastName : ""),
       });
-
-      const myPosts = userData?.posts ?? [];
-      myPosts.unshift(postData);
-
-      for (const post of myPosts) {
-        post.profile = userProfile;
-      }
-
-      await userModel?.updateOne({ emailId }, { $set: { posts: myPosts } });
-
-      await postModel.updateMany(
+      userData.posts.unshift(postData);
+      await userModel.updateOne(
         { emailId },
-        { $set: { profile: userProfile } }
+        { $set: { posts: userData.posts } }
       );
+    } else if (request.like) {
+      const postData = await postModel.findOne({ id: request.id });
+      if (!postData)
+        return NextResponse.json(
+          { message: "Post not found" },
+          { status: 404 }
+        );
 
-      const posts = await postModel.find().sort({ createdAt: -1 });
+      const isLiked = postData.likes.includes(emailId);
 
-      return NextResponse.json(
+      // Update postModel
+      await postModel.updateOne(
+        { id: request.id },
         {
-          message: responseEnums?.SUCCESS,
-          posts,
-        },
-        { status: 200 }
+          $set: {
+            likes: isLiked
+              ? postData.likes.filter((id) => id !== emailId)
+              : [...postData.likes, emailId],
+          },
+        }
       );
-    } catch (e) {
-      console.error(e);
-      return NextResponse.json(
-        { message: responseEnums?.ERROR },
-        { status: 500 }
+
+      // Update userModel
+      await userModel.updateOne(
+        { emailId },
+        isLiked
+          ? { $pull: { likedPosts: request.id } } // Remove from liked posts if unliked
+          : { $addToSet: { likedPosts: request.id } } // Add to liked posts if liked
       );
     }
+
+    // Handle Adding a Comment
+    else if (request.comment) {
+      const postData = await postModel.findOne({ id: request.id });
+      if (!postData)
+        return NextResponse.json(
+          { message: "Post not found" },
+          { status: 404 }
+        );
+
+      const newComment = {
+        name: userData.firstName + " " + userData.lastName,
+        commentText: request.comment,
+        profile: userProfile,
+      };
+
+      // Update postModel
+      await postModel.updateOne(
+        { id: request.id },
+        { $push: { comments: newComment } }
+      );
+
+      // Update userModel to track commented posts
+      await userModel.updateOne(
+        { emailId },
+        { $addToSet: { commentedPosts: request.id } } // Prevents duplicate entries
+      );
+    }
+
+    const posts = await postModel.find().sort({ createdAt: -1 });
+    return NextResponse.json(
+      { message: responseEnums.SUCCESS, posts },
+      { status: 200 }
+    );
   } catch (error) {
+    console.error(error);
     return NextResponse.json(
       { message: exceptionEnums.SERVER_ERROR },
       { status: 500 }

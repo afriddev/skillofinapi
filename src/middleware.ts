@@ -7,7 +7,6 @@ export function middleware(req: NextRequest) {
   const origin = req.headers.get("origin") || "";
 
   if (origin) {
-    console.log(origin);
     res.headers.set("Access-Control-Allow-Origin", origin);
   }
 

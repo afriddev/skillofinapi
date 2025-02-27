@@ -8,9 +8,9 @@ import { getAUthToken } from "@/app/utils/auth/cookieHandlers";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  ahdashdashdaskhdkla
-  asdkashldsakd
-  dasldjlka
+  ahdashdashdaskhdkla;
+  asdkashldsakd;
+  dasldjlka;
   try {
     const request = await req.json();
     if (!request.emailId) {

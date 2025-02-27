@@ -2,6 +2,6 @@
 
 export default function Home() {
   return (
-   <div>SkilloFin</div>
+   <div>SkilloFin </div>
   );
 }

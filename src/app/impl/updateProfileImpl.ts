@@ -42,7 +42,6 @@ export async function updateProfileImpl(user: {
         );
         break;
       case "name":
-        console.log("Hello");
         await userModel.updateOne(
           { emailId },
           {

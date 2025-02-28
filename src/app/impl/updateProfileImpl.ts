@@ -13,6 +13,7 @@ export async function updateProfileImpl(user: {
   emailId: string;
   method: string;
   data: any;
+  edit?: any;
 }): Promise<{
   status: number;
   message: any;
@@ -121,10 +122,8 @@ export async function updateProfileImpl(user: {
         await userAccountModel.updateOne(
           { emailId },
           {
-            $push: {
-              skills: {
-                $each: user?.data?.skills,
-              },
+            $set: {
+              skills: user?.data?.skills,
             },
           }
         );
@@ -151,36 +150,66 @@ export async function updateProfileImpl(user: {
         );
         break;
       case "project":
-        await userAccountModel.updateOne(
-          { emailId },
-          {
-            $push: {
-              projects: {
-                title: user?.data?.title,
-                description: user?.data?.description,
+        if (user?.edit) {
+          console.log(user?.data?._id);
+          await userAccountModel.updateOne(
+            { emailId, "projects._id": user?.data?._id },
+            {
+              $set: {
+                "projects.$.description": user?.data?.description,
+                "projects.$.title": user?.data?.title,
               },
-            },
-          }
-        );
+            }
+          );
+        } else {
+          await userAccountModel.updateOne(
+            { emailId },
+            {
+              $push: {
+                projects: {
+                  title: user?.data?.title,
+                  description: user?.data?.description,
+                },
+              },
+            }
+          );
+        }
         break;
 
       case "employment":
-        await userAccountModel.updateOne(
-          { emailId },
-          {
-            $push: {
-              employmentHistory: {
-                companyName: user?.data?.name,
-                description: user?.data?.description,
-
-                startDate: user?.data?.fromDate,
-
-                endDate: user?.data?.toDate,
+        if (user?.edit) {
+          console.log("hello");
+          await userAccountModel.updateOne(
+            { emailId, "employmentHistory._id": user?.data?._id },
+            {
+              $set: {
+                "employmentHistory.$.companyName": user?.data?.name,
+                "employmentHistory.$.startDate": user?.data?.fromDate,
+                "employmentHistory.$.endDate": user?.data?.toDate,
+                "employmentHistory.$.description": user?.data?.description,
               },
-            },
-          }
-        );
+            }
+          );
+        } else {
+          await userAccountModel.updateOne(
+            { emailId },
+            {
+              $push: {
+                employmentHistory: {
+                  companyName: user?.data?.name,
+                  description: user?.data?.description,
+
+                  startDate: user?.data?.fromDate,
+
+                  endDate: user?.data?.toDate,
+                },
+              },
+            }
+          );
+        }
+
         break;
+
 
       case "education":
         await userAccountModel.updateOne(

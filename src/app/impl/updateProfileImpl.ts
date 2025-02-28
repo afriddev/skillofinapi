@@ -41,6 +41,18 @@ export async function updateProfileImpl(user: {
           }
         );
         break;
+      case "name":
+        console.log("Hello");
+        await userModel.updateOne(
+          { emailId },
+          {
+            $set: {
+              firstName: user?.data?.firstName,
+              lastName: user?.data?.lastName ?? "",
+            },
+          }
+        );
+        break;
       case "bank":
         await userModel.updateOne(
           { emailId },
@@ -130,24 +142,42 @@ export async function updateProfileImpl(user: {
         break;
 
       case "languages":
-        await userAccountModel.updateOne(
-          { emailId },
-          {
-            $push: {
-              languages: {
-                name: user?.data?.language,
-                level:
-                  user?.data?.level === "basic"
-                    ? LANGUAGE_ENUM?.BASIC
-                    : user?.data?.level === "fluent"
-                    ? LANGUAGE_ENUM?.FLUENT
-                    : user?.data?.level === "intermediate"
-                    ? LANGUAGE_ENUM.INTERMEDIATE
-                    : LANGUAGE_ENUM?.NATIVE,
+        if (user?.edit) {
+          await userAccountModel.updateOne(
+            { emailId, "languages._id": user?.data?._id },
+            {
+              $set: {
+                "languages.$.name": user?.data?.name,
+                "languages.$.level": user?.data?.level === "basic"
+                ? LANGUAGE_ENUM?.BASIC
+                : user?.data?.level === "fluent"
+                ? LANGUAGE_ENUM?.FLUENT
+                : user?.data?.level === "intermediate"
+                ? LANGUAGE_ENUM.INTERMEDIATE
+                : LANGUAGE_ENUM?.NATIVE,
               },
-            },
-          }
-        );
+            }
+          );
+        } else {
+          await userAccountModel.updateOne(
+            { emailId },
+            {
+              $push: {
+                languages: {
+                  name: user?.data?.language,
+                  level:
+                    user?.data?.level === "basic"
+                      ? LANGUAGE_ENUM?.BASIC
+                      : user?.data?.level === "fluent"
+                      ? LANGUAGE_ENUM?.FLUENT
+                      : user?.data?.level === "intermediate"
+                      ? LANGUAGE_ENUM.INTERMEDIATE
+                      : LANGUAGE_ENUM?.NATIVE,
+                },
+              },
+            }
+          );
+        }
         break;
       case "project":
         if (user?.edit) {

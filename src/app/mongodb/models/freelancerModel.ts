@@ -137,31 +137,6 @@ const skillSchema = new Schema(
   }
 );
 
-const certificationSchema = new Schema(
-  {
-    id: { type: String, required: false, default: null },
-    title: { type: String, required: true },
-    provider: { type: String, required: true },
-    issueDate: { type: Date, default: null },
-    expiryDate: { type: Date, default: null },
-    credentialUrl: { type: String, default: null },
-  },
-  {
-    timestamps: true,
-  }
-);
-
-const testScoreSchema = new Schema(
-  {
-    id: { type: String, required: false, default: null },
-    testName: { type: String, required: true },
-    score: { type: Number, required: true },
-    dateTaken: { type: Date, default: null },
-  },
-  {
-    timestamps: true,
-  }
-);
 
 const freelancerSchema = new Schema(
   {

@@ -151,7 +151,6 @@ export async function updateProfileImpl(user: {
         break;
       case "project":
         if (user?.edit) {
-          console.log(user?.data?._id);
           await userAccountModel.updateOne(
             { emailId, "projects._id": user?.data?._id },
             {
@@ -178,7 +177,6 @@ export async function updateProfileImpl(user: {
 
       case "employment":
         if (user?.edit) {
-          console.log("hello");
           await userAccountModel.updateOne(
             { emailId, "employmentHistory._id": user?.data?._id },
             {
@@ -210,23 +208,36 @@ export async function updateProfileImpl(user: {
 
         break;
 
-
       case "education":
-        await userAccountModel.updateOne(
-          { emailId },
-          {
-            $push: {
-              educationHistory: {
-                name: user?.data?.name,
-                description: user?.data?.description,
-
-                startDate: user?.data?.fromDate,
-
-                endDate: user?.data?.toDate,
+        if (user?.edit) {
+          await userAccountModel.updateOne(
+            { emailId, "educationHistory._id": user?.data?._id },
+            {
+              $set: {
+                "educationHistory.$.name": user?.data?.name,
+                "educationHistory.$.startDate": user?.data?.fromDate,
+                "educationHistory.$.endDate": user?.data?.toDate,
+                "educationHistory.$.description": user?.data?.description,
               },
-            },
-          }
-        );
+            }
+          );
+        } else {
+          await userAccountModel.updateOne(
+            { emailId },
+            {
+              $push: {
+                educationHistory: {
+                  name: user?.data?.name,
+                  description: user?.data?.description,
+
+                  startDate: user?.data?.fromDate,
+
+                  endDate: user?.data?.toDate,
+                },
+              },
+            }
+          );
+        }
         break;
     }
     return {

@@ -9,7 +9,7 @@ export async function POST(req: Request) {
     const request = await req?.json();
     await connectDB("users");
 
-    if (request?.emailId) {
+    if (request?.emailId && !request?.id) {
       await blogModel.create({
         emailId: decodeString(request?.emailId),
         image: request?.image,
@@ -19,6 +19,18 @@ export async function POST(req: Request) {
       return NextResponse.json({
         message: responseEnums?.SUCCESS,
       });
+    } else if (request?.id && request?.emailId) {
+      await blogModel?.deleteOne({ _id: request?.id });
+      const blogs = await blogModel?.find().sort({ createdAt: -1 });
+      return NextResponse.json(
+        {
+          message: responseEnums?.SUCCESS,
+          data: blogs,
+        },
+        {
+          status: 200,
+        }
+      );
     } else {
       const blogs = await blogModel?.find().sort({ createdAt: -1 });
       return NextResponse.json(

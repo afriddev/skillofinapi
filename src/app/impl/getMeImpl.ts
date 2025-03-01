@@ -7,6 +7,7 @@ import clientModel, { userRole } from "../mongodb/models/clientModel";
 import freelancerModel from "../mongodb/models/freelancerModel";
 import notificationsModel from "../mongodb/models/notificationMode";
 import postModel from "../mongodb/models/postModel";
+import projectModel from "../mongodb/models/projectModel";
 import userModel from "../mongodb/models/userModel";
 import { decodeString } from "../utils/auth/authHandlers";
 
@@ -37,6 +38,7 @@ export async function getMeIMPL(user: {
   const posts = await postModel.find().sort({ createdAt: -1 });
 
   const notificationsData = await notificationsModel.findOne({ emailId });
+  const jobs = await projectModel.find();
 
   return {
     status: 200,
@@ -46,6 +48,7 @@ export async function getMeIMPL(user: {
       userAccountData,
       allPosts: posts,
       notificationsData,
+      jobs
     },
   };
 }

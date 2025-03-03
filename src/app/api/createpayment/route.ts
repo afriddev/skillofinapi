@@ -52,7 +52,6 @@ export async function POST(req: Request) {
         amount: parseInt(request?.amount) * 100,
         currency: "usd",
       });
-      console.log(paymentIntent?.client_secret);
       await paymentClientSecretModel.findOneAndUpdate(
         { emailId: decodeString(request?.emailId) },
         {

@@ -6,7 +6,7 @@ const commentSchema = new Schema(
     name: { type: String, required: true },
     commentText: { type: String, required: true },
     profile: { type: String, required: false },
-    emailId:{type:String,required:true}
+    emailId: { type: String, required: true },
   },
   { _id: false, timestamps: true }
 );
@@ -40,7 +40,12 @@ const userSchema = new Schema(
     currency: { type: String, default: null, required: false },
     countryCode: { type: String, default: null, required: false },
     posts: { type: [postSchema], required: false, default: null },
-    paymentConnectId: { type:String, required: false, default: null },
+    paymentConnectId: { type: String, required: false, default: null },
+    planDetails: {
+      type: String,
+      required: false,
+      default: "FREE",
+    },
     role: {
       type: String,
       enum: Object.values(userRole),
@@ -49,7 +54,7 @@ const userSchema = new Schema(
     },
     profile: { type: String, required: false, default: null },
     online: { type: Boolean, required: false, default: false },
-    
+
     messages: {
       type: Object,
       default: {},

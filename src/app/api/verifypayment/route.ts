@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     if (
       !request.emailId ||
       !request.paymentIntent ||
-      !request?.freelancerEmailId
+      !(request?.freelancerEmailId || request?.pricing)
     ) {
       return NextResponse.json(
         { message: exceptionEnums.BAD_REQUEST },
@@ -48,6 +48,27 @@ export async function POST(req: Request) {
           { new: true }
         );
 
+        if (request?.pricing) {
+          await userModel.findOneAndUpdate(
+            {
+              emailId: decodeString(request?.emailId),
+            },
+            {
+              $set: {
+                planDetails: (request?.plan as string)?.toUpperCase() ?? "FREE",
+              },
+            }
+          );
+          return NextResponse.json(
+            {
+              message: paymentEnums?.PAYMENT_SUCCESS,
+            },
+            {
+              status: 200,
+            }
+          );
+        }
+
         const userData = await userModel?.findOne({
           emailId: request?.freelancerEmailId,
         });
@@ -62,7 +83,7 @@ export async function POST(req: Request) {
                 transfers: { requested: true },
               },
               business_type: "individual",
-              default_currency:  "USD",
+              default_currency: "USD",
             });
             await userModel?.findOneAndUpdate(
               {

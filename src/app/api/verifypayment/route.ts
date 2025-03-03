@@ -72,37 +72,20 @@ export async function POST(req: Request) {
         const userData = await userModel?.findOne({
           emailId: request?.freelancerEmailId,
         });
-        let paymentConnectId = userData?.paymentConnectId;
-        if (userData) {
-          if (!userData?.paymentConnectId) {
-            const account = await stripe.accounts.create({
-              type: "express",
-              email: userData?.emailId,
-              country: "US",
-              capabilities: {
-                transfers: { requested: true },
-              },
-              business_type: "individual",
-              default_currency: "USD",
-            });
-            await userModel?.findOneAndUpdate(
-              {
-                emailId: userData?.emailId,
-              },
-              {
-                $set: {
-                  paymentConnectId: account.id,
-                },
-              }
-            );
-            paymentConnectId = account?.id;
-          }
-        }
         await stripe.transfers.create({
-          amount: paymentIntent?.amount * 100,
+          amount: paymentIntent?.amount,
           currency: "USD",
-          destination: paymentConnectId,
+          destination: userData?.paymentConnectId,
         });
+
+        await userModel?.findOneAndUpdate(
+          { emailId: request?.freelancerEmailId },
+          {
+            $set: {
+              amount: userData?.amount + paymentIntent?.amount,
+            },
+          }
+        );
 
         return NextResponse.json(
           {
@@ -123,7 +106,6 @@ export async function POST(req: Request) {
         );
       }
     } catch (e) {
-      console.log(e);
       return NextResponse.json(
         {
           message: responseEnums?.ERROR,

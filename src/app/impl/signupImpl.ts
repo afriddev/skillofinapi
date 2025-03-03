@@ -10,9 +10,10 @@ import userModel from "../mongodb/models/userModel";
 import { sendOtp } from "../services/apiServices";
 import { userSignUpPayloadType } from "../types/userType";
 import { getOTP } from "../utils/appUtils";
-import { encodeString, hashString } from "../utils/auth/authHandlers";
+import { hashString } from "../utils/auth/authHandlers";
 import { getAUthToken } from "../utils/auth/cookieHandlers";
 import moment from "moment-timezone";
+import Stripe from "stripe";
 
 async function handleSignUpIMPL(
   user: userSignUpPayloadType
@@ -68,7 +69,23 @@ async function handleSignUpIMPL(
 
     const nowWithTimeZone = moment().tz(timeZone).format("hh:mm A");
 
+    // const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
+    //   apiVersion: "2025-01-27.acacia",
+    // });
+
+    // const account = await stripe.accounts.create({
+    //   type: "express",
+    //   email: user?.emailId,
+    //   country: "US",
+    //   capabilities: {
+    //     transfers: { requested: true },
+    //   },
+    //   business_type: "individual",
+    //   default_currency: "USD",
+    // });
+
     await userModel.create({
+      // paymentConnectId: account?.id,
       emailId: user?.emailId,
       firstName: user?.firstName,
       lastName: user?.lastName ?? "",

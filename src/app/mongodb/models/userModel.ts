@@ -63,6 +63,11 @@ const userSchema = new Schema(
       type: Object,
       default: {},
     },
+    amount: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
   },
   { versionKey: false, timestamps: true }
 );

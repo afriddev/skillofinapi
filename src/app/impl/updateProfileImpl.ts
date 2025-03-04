@@ -30,6 +30,7 @@ export async function updateProfileImpl(user: {
   const userAccountModel =
     userData?.role === userRole.FREELANCER ? freelancerModel : clientModel;
 
+
   try {
     switch (user?.method) {
       case "profileImage":
@@ -63,7 +64,6 @@ export async function updateProfileImpl(user: {
           }
         );
 
-        const userData = await userModel?.findOne({ emailId });
         const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
           apiVersion: "2025-01-27.acacia",
         });

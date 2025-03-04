@@ -19,7 +19,25 @@ export async function POST(req: Request) {
       return NextResponse.json({
         message: responseEnums?.SUCCESS,
       });
-    } else if (request?.id && request?.emailId) {
+    } else if (request?.id && request?.emailId && request?.edit) {
+      await blogModel?.findOneAndUpdate(
+        { _id: request?.id },
+        {
+          emailId: decodeString(request?.emailId),
+          image: request?.image,
+          title: request?.title,
+          content: request?.content,
+        }
+      );
+      return NextResponse.json(
+        {
+          message: responseEnums?.SUCCESS,
+        },
+        {
+          status: 200,
+        }
+      );
+    } else if (request?.id && request?.emailId && !request?.edit) {
       await blogModel?.deleteOne({ _id: request?.id });
       const blogs = await blogModel?.find().sort({ createdAt: -1 });
       return NextResponse.json(

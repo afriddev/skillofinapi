@@ -69,16 +69,19 @@ async function handleSignUpIMPL(
 
     const nowWithTimeZone = moment().tz(timeZone).format("hh:mm A");
 
-    // const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-    //   apiVersion: "2025-01-27.acacia",
-    // });
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
+      apiVersion: "2025-01-27.acacia",
+    });
 
     // const account = await stripe.accounts.create({
     //   type: "express",
-    //   email: user?.emailId,
+    //   email: request?.freelancerEmailId,
     //   country: "US",
     //   capabilities: {
     //     transfers: { requested: true },
+    //     card_payments: {
+    //       requested: true,
+    //     },
     //   },
     //   business_type: "individual",
     //   default_currency: "USD",

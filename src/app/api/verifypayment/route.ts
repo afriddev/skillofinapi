@@ -34,9 +34,12 @@ export async function POST(req: Request) {
     try {
       await connectDB("users");
 
+      //Retrive payment
       const paymentIntent = await stripe.paymentIntents.retrieve(
         request?.paymentIntent
       );
+
+      //If payment success
       if (paymentIntent.status === "succeeded") {
         await paymentClientSecretModel.findOneAndUpdate(
           { emailId: decodeString(request?.emailId) },
@@ -69,20 +72,40 @@ export async function POST(req: Request) {
           );
         }
 
+        //Verify payement for milestone
         const userData = await userModel?.findOne({
           emailId: request?.freelancerEmailId,
         });
-        await stripe.transfers.create({
-          amount: paymentIntent?.amount,
-          currency: "USD",
-          destination: userData?.paymentConnectId,
-        });
+        let paymentId = userData?.paymentConnectId;
+        console.log(paymentId);
+
+        if (!paymentId) {
+          const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
+            apiVersion: "2025-01-27.acacia",
+          });
+
+          const account = await stripe.accounts.create({
+            type: "express",
+            email: request?.freelancerEmailId,
+            country: "US",
+            capabilities: {
+              transfers: { requested: true },
+              card_payments: {
+                requested: true,
+              },
+            },
+            business_type: "individual",
+            default_currency: "USD",
+          });
+          paymentId = account?.id;
+        }
 
         await userModel?.findOneAndUpdate(
           { emailId: request?.freelancerEmailId },
           {
             $set: {
               amount: userData?.amount + paymentIntent?.amount,
+              paymentConnectId: paymentId,
             },
           }
         );
@@ -106,6 +129,7 @@ export async function POST(req: Request) {
         );
       }
     } catch (e) {
+      console.log(e);
       return NextResponse.json(
         {
           message: responseEnums?.ERROR,

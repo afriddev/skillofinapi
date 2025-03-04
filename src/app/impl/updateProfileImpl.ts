@@ -8,6 +8,7 @@ import freelancerModel, {
 } from "../mongodb/models/freelancerModel";
 import userModel from "../mongodb/models/userModel";
 import { decodeString } from "../utils/auth/authHandlers";
+import Stripe from "stripe";
 
 export async function updateProfileImpl(user: {
   emailId: string;
@@ -57,22 +58,28 @@ export async function updateProfileImpl(user: {
           { emailId },
           {
             $set: {
-              bakAccountDetails: {
-                accountType: user?.data?.accountType ?? "",
-                cardNumber: user?.data?.cardNumber ?? "", // For card selected
-                cardExpiry: user?.data?.expirationDate ?? "", // Card expiry date
-                cardHolderName: user?.data?.cardHolderName ?? "", // Card holder name
-                accountHolderName: user?.data?.accountHolderName ?? "", // For bank account holder name
-                bankAccountType: user?.data?.bankAccountType ?? "", // For bank account type
-                routingNumber: user?.data?.routingNumber ?? "", // For US bank routing number
-                cvc: user?.data?.cvc ?? "", // For US bank routing number
-                accountNumber: user?.data?.accountNumber ?? "", // Bank account number
-                accountHolderType: user?.data?.accountHolderType ?? "", // For account holder type (individual/business)
-                ifscCode: user?.data?.ifscCode ?? "", // For Indian bank IFSC code (local bank)
-              },
+              bankAccountDetails: { token: user?.data?.id },
             },
           }
         );
+
+        const userData = await userModel?.findOne({ emailId });
+        const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
+          apiVersion: "2025-01-27.acacia",
+        });
+
+        try {
+          const response = await stripe.accounts.createExternalAccount(
+            userData?.paymentConnectId,
+            {
+              external_account: userData?.bankAccountDetails?.token,
+            }
+          );
+          console.log("Card account added:", response);
+        } catch (error) {
+          console.error("Error adding card account:", error);
+        }
+
         break;
       case "online":
         await userModel.updateOne(
@@ -147,13 +154,14 @@ export async function updateProfileImpl(user: {
             {
               $set: {
                 "languages.$.name": user?.data?.name,
-                "languages.$.level": user?.data?.level === "basic"
-                ? LANGUAGE_ENUM?.BASIC
-                : user?.data?.level === "fluent"
-                ? LANGUAGE_ENUM?.FLUENT
-                : user?.data?.level === "intermediate"
-                ? LANGUAGE_ENUM.INTERMEDIATE
-                : LANGUAGE_ENUM?.NATIVE,
+                "languages.$.level":
+                  user?.data?.level === "basic"
+                    ? LANGUAGE_ENUM?.BASIC
+                    : user?.data?.level === "fluent"
+                    ? LANGUAGE_ENUM?.FLUENT
+                    : user?.data?.level === "intermediate"
+                    ? LANGUAGE_ENUM.INTERMEDIATE
+                    : LANGUAGE_ENUM?.NATIVE,
               },
             }
           );
@@ -278,6 +286,7 @@ export async function updateProfileImpl(user: {
       },
     };
   } catch (error) {
+    console.log(error);
     return { status: 200, message: responseEnums.ERROR };
   }
 }

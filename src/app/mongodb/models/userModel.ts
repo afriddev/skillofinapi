@@ -59,7 +59,7 @@ const userSchema = new Schema(
       type: Object,
       default: {},
     },
-    bakAccountDetails: {
+    bankAccountDetails: {
       type: Object,
       default: {},
     },

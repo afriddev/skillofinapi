@@ -6,16 +6,15 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { fullName, emailId, phone,message } = await req?.json();
+    const { fullName, emailId, phone, message } = await req?.json();
 
-    if (fullName && emailId ) {
+    if (fullName && emailId) {
       await connectDB("users");
       const alreadyContactedUser = await contactedUsersModel.findOne({
         emailId,
       });
 
-      if (!alreadyContactedUser)
-      {
+      if (!alreadyContactedUser) {
         await contactedUsersModel.create({
           emailId,
           message,
@@ -23,7 +22,27 @@ export async function POST(req: Request) {
           fullName,
         });
       }
-        
+      const url = "https://freeemailapi.vercel.app/sendEmail/";
+
+      const response = await fetch(url, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({
+          title: "contact@Skillofin.com",
+          subject: "A new user has contacted",
+          fromEmail: process.env.FROM_EMAIL,
+          passkey: process.env.PASS_KEY,
+          toEmail: "afridayan01@gmail.com",
+          body: `Hello Admin,\n\nA new user has contacted you with the following details:\n\nFull Name: ${fullName}\nEmail: ${emailId}\nPhone: ${
+            phone || "Not Provided"
+          }\nMessage: ${
+            message || "No message provided"
+          }\n\nPlease review and take necessary action.\n\nBest Regards,\nYour System`,
+        }),
+      });
 
       return NextResponse.json(
         {

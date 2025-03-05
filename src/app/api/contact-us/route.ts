@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { fullName, emailId, phone } = await req?.json();
+    const { fullName, emailId, phone,message } = await req?.json();
 
     if (fullName && emailId ) {
       await connectDB("users");
@@ -18,7 +18,7 @@ export async function POST(req: Request) {
       {
         await contactedUsersModel.create({
           emailId,
-          message:"",
+          message,
           phone,
           fullName,
         });

@@ -52,7 +52,12 @@ export async function POST(req: Request) {
           userData?.firstName +
           (userData?.lastName ? " " + userData?.lastName : ""),
       });
+      if (!userData?.posts) {
+        userData.posts = [];
+      }
+
       userData.posts.unshift(postData);
+
       await userModel.updateOne(
         { emailId },
         { $set: { posts: userData.posts } }

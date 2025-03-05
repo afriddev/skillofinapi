@@ -27,6 +27,6 @@ const contactedUsersSchema = new Schema(
 );
 
 const contactedUsersModel =
-  models.users || mongoose.model("users", contactedUsersSchema);
+  models.contactedUsers || mongoose.model("contactedUsers", contactedUsersSchema);
 
 export default contactedUsersModel;

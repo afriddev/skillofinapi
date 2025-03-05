@@ -34,6 +34,7 @@ const userSchema = new Schema(
     firstName: { type: String, required: true },
     lastName: { type: String, default: null },
     emailId: { type: String, required: true, unique: true },
+    mobileNumber: { type: String, required: true },
     password: { type: String, required: false },
     loggedIn: { type: Boolean, default: false },
     countryName: { type: String, default: null, required: false },

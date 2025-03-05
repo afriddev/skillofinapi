@@ -90,6 +90,7 @@ async function handleSignUpIMPL(
     await userModel.create({
       // paymentConnectId: account?.id,
       emailId: user?.emailId,
+      mobileNumber: user?.mobileNumber,
       firstName: user?.firstName,
       lastName: user?.lastName ?? "",
       authToken: getAUthToken(),

@@ -31,11 +31,11 @@ export async function POST(req: Request) {
         },
         method: "POST",
         body: JSON.stringify({
-          title: "contact@Skillofin.com",
+          title: "Skillofin",
           subject: "A new user has contacted",
           fromEmail: process.env.FROM_EMAIL,
           passkey: process.env.PASS_KEY,
-          toEmail: "afridayan01@gmail.com",
+          toEmail: "contact@Skillofin.com",
           body: `Hello Admin,\n\nA new user has contacted you with the following details:\n\nFull Name: ${fullName}\nEmail: ${emailId}\nPhone: ${
             phone || "Not Provided"
           }\nMessage: ${
